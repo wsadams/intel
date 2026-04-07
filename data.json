@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "exported": "2026-04-03T06:16:19.435Z",
+  "exported": "2026-04-07T14:24:16.207Z",
   "phases": [
     "Phase 1",
     "Phase 2",
@@ -49,15 +49,13 @@
         "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 0
     },
     {
@@ -67,18 +65,16 @@
       "category": "Brand Foundation",
       "task": "Finalize company name & DBA registration",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 10
     },
     {
@@ -91,15 +87,13 @@
         "Shaun (COO)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 20
     },
     {
@@ -112,15 +106,13 @@
         "Jada (Social)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 30
     },
     {
@@ -130,18 +122,16 @@
       "category": "Brand Foundation",
       "task": "Create brand story / founder narrative",
       "owner": [
-        "Dad (CEO)"
+        "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 40
     },
     {
@@ -151,18 +141,16 @@
       "category": "Legal & Business Setup",
       "task": "Register LLC / Corporation in Maryland",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "1-2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 50
     },
     {
@@ -172,18 +160,16 @@
       "category": "Legal & Business Setup",
       "task": "Obtain EIN from IRS",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 60
     },
     {
@@ -196,15 +182,13 @@
         "Dad (CEO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 70
     },
     {
@@ -214,18 +198,17 @@
       "category": "Legal & Business Setup",
       "task": "Draft Operating Agreement / bylaws",
       "owner": [
+        "Dad (CEO)",
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 80
     },
     {
@@ -238,15 +221,13 @@
         "Shaun (COO)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 90
     },
     {
@@ -259,15 +240,13 @@
         "Dad (CEO)"
       ],
       "time": "4-6 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 100
     },
     {
@@ -277,18 +256,16 @@
       "category": "Legal & Business Setup",
       "task": "Set up accounting software (QuickBooks)",
       "owner": [
-        "Mom (PM)"
+        "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
-      "priority": "",
+      "priority": "Low",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 110
     },
     {
@@ -301,15 +278,13 @@
         "Shaun (COO)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 120
     },
     {
@@ -319,18 +294,16 @@
       "category": "Product Development",
       "task": "Source hardware suppliers & negotiate pricing",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "3 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 130
     },
     {
@@ -340,18 +313,16 @@
       "category": "Product Development",
       "task": "Define 3 monitoring tiers & pricing ($35/mo base)",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 140
     },
     {
@@ -361,18 +332,16 @@
       "category": "Product Development",
       "task": "Select monitoring central station partner",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "3 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 150
     },
     {
@@ -382,61 +351,18 @@
       "category": "Product Development",
       "task": "Develop kit assembly & QC checklist",
       "owner": [
+        "Dad (CEO)",
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 160
-    },
-    {
-      "id": 18,
-      "parentId": null,
-      "phase": "Phase 1",
-      "category": "Product Development",
-      "task": "Create product packaging design",
-      "owner": [
-        "Jada (Social)"
-      ],
-      "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
-      "notes": "",
-      "status": "Not Started",
-      "priority": "",
-      "done": false,
-      "startDate": "",
-      "dueDate": "",
-      "pct": 0,
-      "order": 170
-    },
-    {
-      "id": 19,
-      "parentId": null,
-      "phase": "Phase 1",
-      "category": "Product Development",
-      "task": "Draft user installation guide / manual",
-      "owner": [
-        "Shaun (COO)"
-      ],
-      "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
-      "notes": "",
-      "status": "Not Started",
-      "priority": "",
-      "done": false,
-      "startDate": "",
-      "dueDate": "",
-      "pct": 0,
-      "order": 180
     },
     {
       "id": 20,
@@ -448,15 +374,13 @@
         "Shaun (COO)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 190
     },
     {
@@ -469,15 +393,13 @@
         "Shaun (COO)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 200
     },
     {
@@ -490,15 +412,13 @@
         "Shaun (COO)"
       ],
       "time": "4 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 210
     },
     {
@@ -511,15 +431,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
-      "priority": "",
+      "priority": "Low",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 220
     },
     {
@@ -532,15 +450,13 @@
         "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 230
     },
     {
@@ -550,18 +466,17 @@
       "category": "Digital Infrastructure",
       "task": "Configure subscription billing for monitoring plans",
       "owner": [
+        "Dad (CEO)",
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 240
     },
     {
@@ -571,18 +486,17 @@
       "category": "Digital Infrastructure",
       "task": "Set up business social media accounts",
       "owner": [
+        "Shaun (COO)",
         "Jada (Social)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 250
     },
     {
@@ -592,18 +506,17 @@
       "category": "Team & Operations",
       "task": "Define roles & responsibilities",
       "owner": [
+        "Dad (CEO)",
         "Shaun (COO)"
       ],
       "time": "2 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 260
     },
     {
@@ -613,18 +526,16 @@
       "category": "Team & Operations",
       "task": "Create internal communication workflow",
       "owner": [
-        "Mom (PM)"
+        "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 270
     },
     {
@@ -634,18 +545,16 @@
       "category": "Team & Operations",
       "task": "Build project management system",
       "owner": [
-        "Mom (PM)"
+        "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 50,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 280
     },
     {
@@ -655,18 +564,16 @@
       "category": "Team & Operations",
       "task": "Draft customer service SOPs",
       "owner": [
-        "Mom (PM)"
+        "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 290
     },
     {
@@ -676,18 +583,16 @@
       "category": "Content & Marketing Prep",
       "task": "Develop content strategy & calendar",
       "owner": [
-        "Tia (CE Dir.)"
+        "Jada (Social)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 300
     },
     {
@@ -700,15 +605,13 @@
         "Jeremiah (Video)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 310
     },
     {
@@ -721,15 +624,13 @@
         "Jada (Social)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 320
     },
     {
@@ -742,15 +643,13 @@
         "Shaun (COO)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 330
     },
     {
@@ -760,18 +659,17 @@
       "category": "Content & Marketing Prep",
       "task": "Design brand photography / product photos",
       "owner": [
+        "Shaun (COO)",
         "Jeremiah (Video)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 340
     },
     {
@@ -781,18 +679,16 @@
       "category": "Content & Marketing Prep",
       "task": "Set up email marketing platform",
       "owner": [
-        "Jada (Social)"
+        "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 350
     },
     {
@@ -805,15 +701,13 @@
         "Shaun (COO)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 360
     },
     {
@@ -826,15 +720,13 @@
         "Jada (Social)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 370
     },
     {
@@ -847,15 +739,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 380
     },
     {
@@ -868,15 +758,13 @@
         "Jada (Social)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 390
     },
     {
@@ -889,15 +777,13 @@
         "Jada (Social)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 400
     },
     {
@@ -910,15 +796,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "3 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 410
     },
     {
@@ -931,15 +815,13 @@
         "Dad (CEO)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 420
     },
     {
@@ -952,15 +834,13 @@
         "Shaun (COO)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 430
     },
     {
@@ -973,15 +853,13 @@
         "Shaun (COO)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 440
     },
     {
@@ -994,15 +872,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 450
     },
     {
@@ -1015,15 +891,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 460
     },
     {
@@ -1036,15 +910,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 470
     },
     {
@@ -1057,15 +929,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 480
     },
     {
@@ -1078,15 +948,13 @@
         "Dad (CEO)"
       ],
       "time": "2 weeks prep",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 490
     },
     {
@@ -1099,15 +967,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 500
     },
     {
@@ -1120,15 +986,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 510
     },
     {
@@ -1141,15 +1005,13 @@
         "Jada (Social)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 520
     },
     {
@@ -1162,15 +1024,13 @@
         "Jeremiah (Video)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 530
     },
     {
@@ -1183,15 +1043,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 540
     },
     {
@@ -1204,15 +1062,13 @@
         "Jada (Social)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 550
     },
     {
@@ -1225,15 +1081,13 @@
         "Mom (PM)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 560
     },
     {
@@ -1246,15 +1100,13 @@
         "Mom (PM)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 570
     },
     {
@@ -1267,15 +1119,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 580
     },
     {
@@ -1288,15 +1138,13 @@
         "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 590
     },
     {
@@ -1309,15 +1157,13 @@
         "Shaun (COO)"
       ],
       "time": "3 days",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 600
     },
     {
@@ -1330,15 +1176,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 610
     },
     {
@@ -1351,15 +1195,13 @@
         "Mom (PM)"
       ],
       "time": "Monthly",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 620
     },
     {
@@ -1372,15 +1214,13 @@
         "Shaun (COO)"
       ],
       "time": "6-8 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 630
     },
     {
@@ -1393,15 +1233,13 @@
         "Shaun (COO)"
       ],
       "time": "4 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 640
     },
     {
@@ -1414,15 +1252,13 @@
         "Shaun (COO)"
       ],
       "time": "8-12 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 650
     },
     {
@@ -1435,15 +1271,13 @@
         "Dad (CEO)"
       ],
       "time": "8 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 660
     },
     {
@@ -1456,15 +1290,13 @@
         "Jada (Social)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 670
     },
     {
@@ -1477,15 +1309,13 @@
         "Shaun (COO)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 680
     },
     {
@@ -1498,15 +1328,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "4 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 690
     },
     {
@@ -1519,15 +1347,13 @@
         "Mom (PM)"
       ],
       "time": "4-6 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 700
     },
     {
@@ -1540,15 +1366,13 @@
         "Dad (CEO)"
       ],
       "time": "4-6 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 710
     },
     {
@@ -1561,15 +1385,13 @@
         "Dad (CEO)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 720
     },
     {
@@ -1582,15 +1404,13 @@
         "Shaun (COO)"
       ],
       "time": "8-12 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 730
     },
     {
@@ -1603,15 +1423,13 @@
         "Shaun (COO)"
       ],
       "time": "4 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 740
     },
     {
@@ -1624,15 +1442,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 750
     },
     {
@@ -1645,15 +1461,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "Quarterly",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 760
     },
     {
@@ -1666,15 +1480,13 @@
         "Dad (CEO)"
       ],
       "time": "6-8 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 770
     },
     {
@@ -1687,15 +1499,13 @@
         "Shaun (COO)"
       ],
       "time": "2-4 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 780
     },
     {
@@ -1708,15 +1518,13 @@
         "Shaun (COO)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 790
     },
     {
@@ -1729,15 +1537,13 @@
         "Shaun (COO)"
       ],
       "time": "4-6 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 800
     },
     {
@@ -1750,15 +1556,13 @@
         "Shaun (COO)"
       ],
       "time": "6-12 months",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 810
     },
     {
@@ -1771,15 +1575,13 @@
         "Shaun (COO)"
       ],
       "time": "12+ months",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 820
     },
     {
@@ -1792,15 +1594,13 @@
         "Shaun (COO)"
       ],
       "time": "12+ months",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 830
     },
     {
@@ -1813,15 +1613,13 @@
         "Dad (CEO)"
       ],
       "time": "2-3 years",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 840
     },
     {
@@ -1834,15 +1632,13 @@
         "Shaun (COO)"
       ],
       "time": "18+ months",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 850
     },
     {
@@ -1855,15 +1651,13 @@
         "Dad (CEO)"
       ],
       "time": "Ongoing",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 860
     },
     {
@@ -1876,15 +1670,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "12+ months",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 870
     },
     {
@@ -1897,15 +1689,13 @@
         "Dad (CEO)"
       ],
       "time": "2-3 years",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 880
     },
     {
@@ -1918,15 +1708,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "12+ months",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 890
     },
     {
@@ -1936,18 +1724,16 @@
       "category": "Legal & Business Setup",
       "task": "Obtain general liability business insurance",
       "owner": [
-        "Shaun (COO)"
+        "Dad (CEO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 900
     },
     {
@@ -1960,15 +1746,13 @@
         "Dad (CEO)"
       ],
       "time": "3-4 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 910
     },
     {
@@ -1978,18 +1762,17 @@
       "category": "Legal & Business Setup",
       "task": "Draft customer monitoring agreement / terms of service",
       "owner": [
+        "Dad (CEO)",
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 920
     },
     {
@@ -2002,15 +1785,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 930
     },
     {
@@ -2020,18 +1801,17 @@
       "category": "Digital Infrastructure",
       "task": "Set up Google Business Profile",
       "owner": [
-        "Jada (Social)"
+        "Dad (CEO)",
+        "Shaun (COO)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 940
     },
     {
@@ -2044,15 +1824,13 @@
         "Shaun (COO)"
       ],
       "time": "1 day",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 950
     },
     {
@@ -2065,15 +1843,13 @@
         "Tia (CE Dir.)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 960
     },
     {
@@ -2086,15 +1862,13 @@
         "Shaun (COO)"
       ],
       "time": "1 week",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 970
     },
     {
@@ -2107,15 +1881,13 @@
         "Jada (Social)"
       ],
       "time": "2 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 980
     },
     {
@@ -2128,15 +1900,13 @@
         "Shaun (COO)"
       ],
       "time": "6-8 weeks",
-      "blocker": "",
-      "dependsOn": null,
       "notes": "",
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
       "order": 990
     },
     {
@@ -2153,11 +1923,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.1
     },
     {
@@ -2174,11 +1942,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.11
     },
     {
@@ -2195,11 +1961,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.12
     },
     {
@@ -2216,11 +1980,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.13
     },
     {
@@ -2237,11 +1999,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.14000000000004
     },
     {
@@ -2258,11 +2018,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.15000000000003
     },
     {
@@ -2279,11 +2037,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.16
     },
     {
@@ -2300,11 +2056,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.17
     },
     {
@@ -2321,11 +2075,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 310.18
     },
     {
@@ -2342,11 +2094,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311
     },
     {
@@ -2363,11 +2113,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.1
     },
     {
@@ -2384,11 +2132,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.11
     },
     {
@@ -2405,11 +2151,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.12
     },
     {
@@ -2426,11 +2170,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.13
     },
     {
@@ -2447,11 +2189,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.14000000000004
     },
     {
@@ -2468,11 +2208,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.15000000000003
     },
     {
@@ -2489,11 +2227,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 311.16
     },
     {
@@ -2503,6 +2239,9 @@
       "category": "Content & Marketing Prep",
       "task": "Film product unboxing & DIY installation walkthrough video",
       "owner": [
+        "Dad (CEO)",
+        "Shaun (COO)",
+        "Jada (Social)",
         "Jeremiah (Video)"
       ],
       "time": "3 days",
@@ -2510,11 +2249,9 @@
       "status": "Not Started",
       "priority": "High",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1370
     },
     {
@@ -2531,11 +2268,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1380
     },
     {
@@ -2552,11 +2287,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1390.01
     },
     {
@@ -2573,11 +2306,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1400.02
     },
     {
@@ -2594,11 +2325,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1410.03
     },
     {
@@ -2615,11 +2344,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1420.04
     },
     {
@@ -2636,11 +2363,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 1430.05
     },
     {
@@ -2657,11 +2382,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.1
     },
     {
@@ -2678,11 +2401,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.11
     },
     {
@@ -2699,11 +2420,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.12
     },
     {
@@ -2720,11 +2439,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.13
     },
     {
@@ -2741,11 +2458,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.14000000000004
     },
     {
@@ -2762,11 +2477,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.15000000000003
     },
     {
@@ -2783,11 +2496,9 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
       "startDate": "",
       "dueDate": "",
-      "pct": 0,
-      "blocker": "",
-      "dependsOn": null,
       "order": 340.16
     },
     {
@@ -2804,12 +2515,29 @@
       "status": "Not Started",
       "priority": "",
       "done": false,
+      "pct": 0,
+      "startDate": "",
+      "dueDate": "",
+      "order": 340.17
+    },
+    {
+      "id": 133,
+      "parentId": 1,
+      "phase": "Phase 1",
+      "category": "Brand Foundation",
+      "task": "test",
+      "owner": [],
+      "time": "",
+      "notes": "",
+      "status": "Not Started",
+      "priority": "",
+      "done": false,
       "startDate": "",
       "dueDate": "",
       "pct": 0,
+      "order": 1454,
       "blocker": "",
-      "dependsOn": null,
-      "order": 340.17
+      "dependsOn": null
     }
   ]
 }
