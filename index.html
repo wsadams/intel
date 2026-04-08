@@ -40,6 +40,7 @@
   --p-high:#E05252;--p-med:#E8A430;--p-low:#5B9BD5;
   /* typography — editable via Settings */
   --title-size:22px;--subtitle-size:10px;--body-size:13px;--table-size:12.5px;--body-weight:400;
+  --logo-padding:0px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--offwhite);min-height:100vh;font-size:var(--body-size);font-weight:var(--body-weight);}
@@ -66,6 +67,7 @@ header{background:linear-gradient(135deg,#0A1525,#0F1E36 50%,#162845);border-bot
 .logo{display:flex;align-items:center;gap:10px;}
 .logo-img{height:36px;width:36px;border-radius:6px;object-fit:contain;display:none;}
 .logo-img.visible{display:block;}
+.logo-text{padding:var(--logo-padding);}
 .logo-text .logo-name{font-family:'Bebas Neue',sans-serif;font-size:var(--title-size);letter-spacing:2px;color:#fff;line-height:1;}
 .logo-text .logo-sub{font-size:var(--subtitle-size);color:var(--acc2);letter-spacing:2.5px;text-transform:uppercase;font-weight:500;margin-top:2px;}
 .hdr-right{display:flex;gap:7px;align-items:center;}
@@ -448,6 +450,23 @@ td input[type=date].ci{color-scheme:dark;}
           <div class="field"><label>Logo Image URL (optional)</label><input type="text" id="setLogoUrl" placeholder="https://…/logo.png" oninput="previewBranding()"></div>
           <div class="field"><label>Version label</label><input type="text" id="setVersion" placeholder="v2.0" oninput="previewBranding()"></div>
         </div>
+        <div class="settings-grid" style="margin-top:12px">
+          <div class="field">
+            <label>Logo / Title Padding</label>
+            <div class="font-row" style="margin-bottom:0">
+              <input type="range" min="0" max="20" id="fsLogoPadding" oninput="previewLogoPadding()" value="0" style="flex:1;accent-color:var(--acc)">
+              <span class="font-val" id="fvLogoPadding" style="min-width:36px;text-align:right">0px</span>
+            </div>
+            <span style="font-size:11px;color:var(--mid);margin-top:3px">Adds equal padding on all sides of the title &amp; subtitle block</span>
+          </div>
+          <div class="field">
+            <label>Default Phase on Load</label>
+            <select id="setDefaultPhase" style="padding:8px 11px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:7px;color:var(--offwhite);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+              <option value="__all__">All Tasks (show everything)</option>
+            </select>
+            <span style="font-size:11px;color:var(--mid);margin-top:3px">Which tab opens when someone first loads the dashboard</span>
+          </div>
+        </div>
         <button class="btn btn-gold btn-sm" style="margin-top:10px" onclick="saveBranding()">Save Branding</button>
       </div>
 
@@ -664,6 +683,7 @@ let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — P
 let appVersion='v2.0', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
+let defaultPhase='Phase 1';
 let sortCol=null, sortDir=1, sortByOrder=true;
 let dragSrcId=null, kbDragId=null, expanded=new Set();
 let undoStack=[], redoStack=[], MAX_UNDO=30;
@@ -737,6 +757,8 @@ async function loadFromSupabase(){
         logoUrl = s.logo_url || '';
         if(s.font_settings) applyFontSettings(s.font_settings);
         if(s.palette) applyPalette(s.palette, false);
+        if(s.default_phase) defaultPhase=s.default_phase;
+        if(s.logo_padding!==undefined) applyLogoPadding(s.logo_padding);
         applyBrandingToHeader();
       }
     }
@@ -818,7 +840,9 @@ async function saveSettingsToSb(){
       tableSize: getComputedStyle(document.documentElement).getPropertyValue('--table-size').trim(),
       bodyWeight: getComputedStyle(document.documentElement).getPropertyValue('--body-weight').trim(),
     },
-    palette: document.documentElement.dataset.palette||'gold'
+    palette: document.documentElement.dataset.palette||'gold',
+    default_phase: defaultPhase,
+    logo_padding: getComputedStyle(document.documentElement).getPropertyValue('--logo-padding').trim()
   };
   try {
     await sbFetch('settings?id=eq.1', {method:'PATCH', body:JSON.stringify(row)});
@@ -1598,6 +1622,19 @@ function loadSettingsPage(){
   // Tags
   renderSettingsTags();
   // Supabase fields
+  // Default phase selector — populate with current phases
+  const dpSel = document.getElementById('setDefaultPhase');
+  if(dpSel){
+    dpSel.innerHTML = '<option value="__all__">All Tasks (show everything)</option>';
+    phases.forEach(p => dpSel.innerHTML += `<option value="${p}"${defaultPhase===p?' selected':''}>${p}</option>`);
+    if(defaultPhase==='__all__') dpSel.value='__all__';
+  }
+  // Logo padding slider
+  const curPad = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--logo-padding'))||0;
+  const fsLP = document.getElementById('fsLogoPadding');
+  const fvLP = document.getElementById('fvLogoPadding');
+  if(fsLP) fsLP.value = curPad;
+  if(fvLP) fvLP.textContent = curPad+'px';
   document.getElementById('setSbUrl').value=SB_URL;
   document.getElementById('setSbKey').value='';
 }
@@ -1668,8 +1705,22 @@ async function saveBranding(){
   appSubtitle=document.getElementById('setSubtitle').value.trim();
   appVersion=document.getElementById('setVersion').value.trim()||'v2.0';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
+  defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   applyBrandingToHeader();
   await saveSettingsToSb();toast('✓ Branding saved');
+}
+function applyLogoPadding(val){
+  const px = parseInt(val)||0;
+  document.documentElement.style.setProperty('--logo-padding', px+'px');
+  const el = document.getElementById('fsLogoPadding');
+  const lbl = document.getElementById('fvLogoPadding');
+  if(el) el.value = px;
+  if(lbl) lbl.textContent = px+'px';
+}
+function previewLogoPadding(){
+  const val = document.getElementById('fsLogoPadding').value;
+  document.getElementById('fvLogoPadding').textContent = val+'px';
+  document.documentElement.style.setProperty('--logo-padding', val+'px');
 }
 function applyBrandingToHeader(){
   document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">${esc(appVersion)}</span>`;
@@ -2035,7 +2086,7 @@ async function init(){
   // Load from Supabase (falls back to seed if offline/empty)
   await loadFromSupabase();
   // Build UI
-  currentTab='Phase 1';
+  currentTab=defaultPhase||'Phase 1';
   rebuildAll();
   // Subscribe to realtime polling
   subscribeRealtime();
