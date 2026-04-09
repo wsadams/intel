@@ -812,7 +812,7 @@ const PR={'High':{cls:'pri-high',lbl:'High'},'Medium':{cls:'pri-med',lbl:'Med'},
 const PP=['pill-0','pill-1','pill-2','pill-3'];
 const SO=['Not Started','In Progress','On Hold','Complete'];
 
-const NOTE_COLORS=['#F9E4B7','#B5E8D0','#F7C5C5','#C8D8F8','#E8D0F5','#FFF0C0'];
+const NOTE_COLORS=['#FFF0C0','#F9E4B7','#FFD6B0','#F7C5C5','#FFB3BA','#E8D0F5','#D4BFFF','#C8D8F8','#B5E8D0','#C8F0D8','#D8F5C0','#E8F5A0'];
 const DEFAULT_PHASE_COLORS=['#2A5AB5','#1A6B3A','#C45C10','#6B2DAF','#B89010','#1A5A6B'];
 let phaseColors={}; // keyed by phase name
 
@@ -971,6 +971,106 @@ async function saveSettingsToSb(){
   } catch(e){ setSyncDot('error'); console.warn(e); }
 }
 
+
+// ══════════════════════════════════════════════════════════════
+//  NOTES PAGE — ADD / EDIT / DELETE
+// ══════════════════════════════════════════════════════════════
+function openNoteModal(id=null){
+  document.getElementById('noteModalTitle').textContent=id?'Edit Note':'Add Note';
+  document.getElementById('noteEditId').value=id||'';
+  const copts=document.getElementById('noteColorOpts');
+  if(copts) copts.innerHTML=NOTE_COLORS.map((c,i)=>`<div class="note-color-opt" style="background:${c}" data-color="${c}" onclick="selectNoteColor('${c}')" title="${NOTE_COLOR_LABELS[i]}"></div>`).join('');
+  if(id){
+    const n=notes.find(x=>x.id===id||x.id===Number(id));if(!n)return;
+    document.getElementById('nTitle').value=n.title||'';
+    document.getElementById('nBody').innerHTML=n.body||'';
+    document.getElementById('nTags').value=(n.tags||[]).join(' ');
+    document.getElementById('nPinned').checked=!!n.pinned;
+    selectNoteColor(n.color||NOTE_COLORS[0]);
+  } else {
+    document.getElementById('nTitle').value='';
+    document.getElementById('nBody').innerHTML='';
+    document.getElementById('nTags').value='';
+    document.getElementById('nPinned').checked=false;
+    selectNoteColor(NOTE_COLORS[0]);
+  }
+  document.getElementById('noteModal').classList.add('open');
+}
+
+function selectNoteColor(c){
+  document.querySelectorAll('.note-color-opt').forEach(el=>el.classList.toggle('sel',el.dataset.color===c));
+  const m=document.getElementById('noteModal');
+  if(m)m.dataset.noteColor=c;
+}
+
+function nRteCmd(cmd){
+  const b=document.getElementById('nBody');
+  if(b){b.focus();document.execCommand(cmd,false,null);}
+}
+
+async function saveNote(){
+  const title=(document.getElementById('nTitle').value||'').trim();
+  const body=document.getElementById('nBody').innerHTML.trim();
+  const id=parseInt(document.getElementById('noteEditId').value)||null;
+  const tags=(document.getElementById('nTags').value||'').split(/\s+/).map(s=>s.trim()).filter(Boolean);
+  const color=(document.getElementById('noteModal').dataset.noteColor)||NOTE_COLORS[0];
+  const pinned=document.getElementById('nPinned').checked;
+  const existing=id?notes.find(x=>x.id===id):null;
+  const obj={
+    id:id||null, title, body, color, pinned, tags,
+    updated_at:new Date().toISOString(),
+    pos_x:existing?.pos_x??null,
+    pos_y:existing?.pos_y??null
+  };
+  if(!obj.id) obj.id=Date.now(); // temp local id
+  if(id){const i=notes.findIndex(x=>x.id===id);if(i>=0)notes[i]=obj;else notes.push(obj);}
+  else notes.unshift(obj);
+  await saveNoteToSb(obj);
+  logAudit(id?'Note Edited':'Note Added',`Note '${(title||'Untitled').slice(0,50)}' ${id?'updated':'created'}`);
+  closeModal('noteModal');renderNotesView();toast(id?'✓ Note updated':'✓ Note added');
+}
+
+async function deleteNote(id){
+  const nid=typeof id==='string'?parseInt(id):id;
+  if(!confirm('Delete this note?'))return;
+  const _dn=notes.find(n=>n.id===nid||n.id===id);
+  logAudit('Note Deleted',`Note '${((_dn?.title)||'Untitled').slice(0,50)}' deleted`);
+  notes=notes.filter(n=>n.id!==nid&&n.id!==id);
+  delete notePositions[nid];delete notePositions[id];
+  await deleteNoteFromSb(nid||id);renderNotesView();toast('Note deleted');
+}
+
+async function toggleNotePin(id){
+  const nid=typeof id==='string'?parseInt(id):id;
+  const n=notes.find(x=>x.id===nid||x.id===id);if(!n)return;
+  n.pinned=!n.pinned;n.updated_at=new Date().toISOString();
+  await saveNoteToSb(n);renderNotesView();
+}
+
+
+function renderNotesTable(filtered){
+  const tbody=document.getElementById('notesTbody');if(!tbody)return;
+  if(!filtered.length){
+    tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:22px;color:var(--mid);font-size:13px">No notes yet. Click + Add Note to begin.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML=filtered.map((n,i)=>{
+    const snippet=(n.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,80);
+    const tags=(n.tags||[]).map(t=>`<span class="tag-chip" style="font-size:10px">${esc(t)}</span>`).join('');
+    const d=n.updated_at?new Date(n.updated_at).toLocaleDateString():'';
+    return`<tr>
+      <td style="color:var(--mid);font-family:'DM Mono',monospace;font-size:10px;width:30px">${i+1}</td>
+      <td style="font-weight:500">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</td>
+      <td style="color:var(--mid);font-size:12px">${esc(snippet)}</td>
+      <td>${tags}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);white-space:nowrap">${d}</td>
+      <td style="white-space:nowrap">
+        <button class="edit-row-btn" onclick="openNoteModal(${n.id})">✏</button>
+        <button class="del-btn" onclick="deleteNote(${n.id})">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
 async function saveNoteToSb(n){
   setSyncDot('saving');
   const row = {title:n.title||'',body:n.body||'',color:n.color||NOTE_COLORS[0],pinned:!!n.pinned,tags:n.tags||[],pos_x:n.pos_x??null,pos_y:n.pos_y??null};
@@ -1634,7 +1734,7 @@ function toggleBlockerPanel(){blockerPanelCollapsed=!blockerPanelCollapsed;docum
 // ══════════════════════════════════════════════════════════════
 //  NOTES PAGE
 // ══════════════════════════════════════════════════════════════
-const NOTE_COLOR_LABELS=['Yellow','Mint','Pink','Blue','Lavender','Cream'];
+const NOTE_COLOR_LABELS=['Cream','Yellow','Peach','Blush','Rose','Lavender','Violet','Sky','Mint','Sage','Lime','Lemon'];
 function setNotesView(v,el){notesView=v;document.querySelectorAll('#notesBoardBtn,#notesTableBtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('notesBoardView').style.display=v==='board'?'block':'none';document.getElementById('notesTableView').style.display=v==='table'?'block':'none';renderNotesView();}
 function renderNotesView(){
   const q=(document.getElementById('noteSearch')?.value||'').toLowerCase();
@@ -1736,6 +1836,29 @@ function stickyFmt(cmd){
   if(b){b.focus();document.execCommand(cmd,false,null);}
 }
 
+function changeStickyColor(id,color){
+  const n=notes.find(x=>x.id===id||x.id===Number(id));
+  if(!n)return;
+  n.color=color;
+  // Update card background live
+  const card=document.querySelector(`.sticky[data-id="${id}"]`);
+  if(card)card.style.background=color;
+  // Re-populate swatches to show new selection
+  populateStickySwatches(id,color);
+}
+
+function populateStickySwatches(id,currentColor){
+  const wrap=document.getElementById('sn-colors-'+id);
+  if(!wrap)return;
+  wrap.innerHTML=NOTE_COLORS.map(c=>{
+    const sel=c===currentColor;
+    return `<div onmousedown="event.preventDefault()" onclick="changeStickyColor(${id},'${c}')"
+      style="width:16px;height:16px;border-radius:50%;background:${c};cursor:pointer;
+      border:2px solid ${sel?'rgba(0,0,0,.45)':'transparent'};
+      transition:border .13s;flex-shrink:0;box-sizing:border-box"></div>`;
+  }).join('');
+}
+
 function cancelStickyEdit(){
   activeNoteEdit=null;
   renderNotesView();
@@ -1794,203 +1917,6 @@ document.addEventListener('mouseup',async e=>{
 
 // ══════════════════════════════════════════════════════════════
 //  NOTES PAGE
-// ══════════════════════════════════════════════════════════════
-function setNotesView(v,el){notesView=v;document.querySelectorAll('#notesBoardBtn,#notesTableBtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('notesBoardView').style.display=v==='board'?'block':'none';document.getElementById('notesTableView').style.display=v==='table'?'block':'none';renderNotesView();}
-function renderNotesView(){
-  const q=(document.getElementById('noteSearch')?.value||'').toLowerCase();
-  const filtered=q?notes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.body||'').replace(/<[^>]+>/g,' ').toLowerCase().includes(q)):notes;
-  if(notesView==='board')renderStickyBoard(filtered);else renderNotesTable(filtered);
-  updateTabCounts();
-}
-function renderStickyBoard(filtered){
-  const board=document.getElementById('stickyBoard');if(!board)return;
-  if(!filtered.length){
-    board.innerHTML='<div style="color:var(--mid);font-size:13px;padding:20px;position:absolute">No notes yet. Click + Add Note to begin.</div>';
-    return;
-  }
-  const sorted=[...filtered].sort((a,b)=>(b.pinned||0)-(a.pinned||0));
-  // Use a fixed width for grid calc since board may be hidden on first render
-  const boardW = board.offsetWidth > 50 ? board.offsetWidth : 760;
-  const cardW = 234, cardH = 210, gap = 16;
-  const cols = Math.max(1, Math.floor((boardW - gap) / (cardW + gap)));
-  board.innerHTML='';
-  sorted.forEach((n,i)=>{
-    if(!notePositions[n.id]){
-      if(n.pos_x!=null && n.pos_y!=null){
-        notePositions[n.id]={x:n.pos_x,y:n.pos_y};
-      } else {
-        const col=i%cols;
-        const row=Math.floor(i/cols);
-        notePositions[n.id]={x:gap+col*(cardW+gap), y:gap+row*(cardH+gap)};
-      }
-    }
-    const pos=notePositions[n.id];
-    const tags=(n.tags||[]).map(t=>`<span class="tag-chip" style="font-size:10px;color:#333;background:rgba(0,0,0,.12);border-color:rgba(0,0,0,.15)">${esc(t)}</span>`).join('');
-    const isEditing = activeNoteEdit===n.id;
-    const el=document.createElement('div');
-    el.className='sticky'+(isEditing?' sticky-editing':'');
-    el.dataset.id=n.id;
-    el.style.cssText=`background:${n.color||NOTE_COLORS[0]};left:${pos.x}px;top:${pos.y}px;width:${cardW}px`;
-    if(isEditing){
-      el.innerHTML=`
-        <div style="display:flex;gap:3px;padding:5px 6px 5px;border-bottom:1px solid rgba(0,0,0,.12);flex-wrap:wrap">
-          <button type="button" onclick="stickyFmt('bold')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;font-weight:700;color:#333">B</button>
-          <button type="button" onclick="stickyFmt('italic')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;font-style:italic;color:#333">I</button>
-          <button type="button" onclick="stickyFmt('underline')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;text-decoration:underline;color:#333">U</button>
-          <button type="button" onclick="stickyFmt('insertUnorderedList')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;color:#333">• List</button>
-          <div style="flex:1"></div>
-          <button type="button" onclick="saveStickyEdit(${n.id})" style="background:rgba(0,0,0,.2);border:none;border-radius:3px;cursor:pointer;padding:2px 7px;font-size:11px;font-weight:600;color:#333">Save</button>
-          <button type="button" onclick="cancelStickyEdit()" style="background:none;border:none;cursor:pointer;padding:2px 5px;font-size:11px;color:#555">✕</button>
-        </div>
-        <input id="stickyTitleEdit-${n.id}" value="${esc(n.title||'')}" placeholder="Title…"
-          style="width:100%;border:none;background:transparent;font-size:13px;font-weight:600;padding:8px 10px 4px;outline:none;color:#2a2a2a;font-family:'DM Sans',sans-serif">
-        <div id="stickyBodyEdit-${n.id}" contenteditable="true"
-          style="min-height:80px;padding:4px 10px 8px;font-size:12px;outline:none;color:rgba(0,0,0,.7);line-height:1.5;font-family:'DM Sans',sans-serif"
-          >${n.body||''}</div>
-        <div class="sticky-foot">
-          <span class="sticky-pin" onclick="event.stopPropagation();toggleNotePin(${n.id})">${n.pinned?'📌':'📍'}</span>
-          <span class="sticky-del" onclick="event.stopPropagation();deleteNote(${n.id})">✕</span>
-        </div>`;
-      // Focus body for immediate typing
-      setTimeout(()=>{
-        const body=document.getElementById('stickyBodyEdit-'+n.id);
-        if(body){body.focus();const range=document.createRange();range.selectNodeContents(body);range.collapse(false);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);}
-      },50);
-    } else {
-      el.innerHTML=`
-        <div class="sticky-title">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</div>
-        <div class="sticky-body" style="max-height:120px;overflow:hidden">${n.body||'<em style="opacity:.4">No content</em>'}</div>
-        ${tags?`<div style="margin-top:6px">${tags}</div>`:''}
-        <div class="sticky-foot">
-          <span class="sticky-pin" onclick="event.stopPropagation();toggleNotePin(${n.id})">${n.pinned?'📌':'📍'}</span>
-          <span style="font-size:11px;cursor:pointer;opacity:.4;color:#333" onclick="event.stopPropagation();openStickyEdit(${n.id})" title="Edit">✏</span>
-          <span class="sticky-del" onclick="event.stopPropagation();deleteNote(${n.id})">✕</span>
-        </div>`;
-      // Click card body to start editing
-      el.addEventListener('click', (e)=>{
-        if(e.target.classList.contains('sticky-pin')||e.target.classList.contains('sticky-del')||e.target.tagName==='SPAN')return;
-        openStickyEdit(n.id);
-      });
-    }
-    el.addEventListener('mousedown', stickyDragStart);
-    board.appendChild(el);
-  });
-  // Update board min-height to fit all notes
-  if(sorted.length){
-    const rows=Math.ceil(sorted.length/cols);
-    const minH=gap+rows*(cardH+gap)+40;
-    board.style.minHeight=Math.max(500,minH)+'px';
-  }
-}
-
-function stickyFmt(cmd){
-  const id=activeNoteEdit;if(!id)return;
-  const el=document.getElementById('stickyBodyEdit-'+id);
-  if(el){el.focus();document.execCommand(cmd,false,null);}
-}
-
-function openStickyEdit(id){
-  activeNoteEdit=id;
-  renderNotesView();
-}
-
-function cancelStickyEdit(){
-  activeNoteEdit=null;
-  renderNotesView();
-}
-
-async function saveStickyEdit(id){
-  const n=notes.find(x=>x.id===id);if(!n)return;
-  const titleEl=document.getElementById('stickyTitleEdit-'+id);
-  const bodyEl=document.getElementById('stickyBodyEdit-'+id);
-  if(titleEl) n.title=titleEl.value.trim();
-  if(bodyEl) n.body=bodyEl.innerHTML;
-  n.updated_at=new Date().toISOString();
-  activeNoteEdit=null;
-  await saveNoteToSb(n);
-  logAudit('Note Edited',`Note '${(n.title||'Untitled').slice(0,50)}' updated`);
-  renderNotesView();
-  toast('✓ Note saved');
-}
-
-
-
-function renderNotesTable(filtered){
-  const tbody=document.getElementById('notesTbody');if(!tbody)return;
-  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:22px;color:var(--mid)">No notes yet.</td></tr>`;return;}
-  tbody.innerHTML=filtered.map((n,i)=>{
-    const snippet=(n.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,80);
-    const tags=(n.tags||[]).map(t=>`<span class="tag-chip" style="font-size:10px">${esc(t)}</span>`).join('');
-    const d=n.updated_at?new Date(n.updated_at).toLocaleDateString():'';
-    return`<tr><td style="color:var(--mid);font-family:'DM Mono',monospace;font-size:10px">${i+1}</td>
-      <td style="font-weight:500">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</td>
-      <td style="color:var(--mid);font-size:12px">${esc(snippet)}</td>
-      <td>${tags}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid)">${d}</td>
-      <td style="display:flex;gap:5px">
-        <button class="edit-row-btn" onclick="openNoteModal(${n.id})">✏</button>
-        <button class="del-btn" onclick="deleteNote(${n.id})">✕</button>
-      </td></tr>`;
-  }).join('');
-}
-function openNoteModal(id=null){
-  document.getElementById('noteModalTitle').textContent=id?'Edit Note':'Add Note';
-  document.getElementById('noteEditId').value=id||'';
-  // build color opts
-  const copts=document.getElementById('noteColorOpts');
-  copts.innerHTML=NOTE_COLORS.map((c,i)=>`<div class="note-color-opt" style="background:${c}" data-color="${c}" onclick="selectNoteColor('${c}')" title="${NOTE_COLOR_LABELS[i]}"></div>`).join('');
-  if(id){
-    const n=notes.find(x=>x.id===id);if(!n)return;
-    document.getElementById('nTitle').value=n.title||'';
-    document.getElementById('nBody').innerHTML=n.body||'';
-    document.getElementById('nTags').value=(n.tags||[]).join(' ');
-    document.getElementById('nPinned').checked=!!n.pinned;
-    selectNoteColor(n.color||NOTE_COLORS[0]);
-  } else {
-    document.getElementById('nTitle').value='';
-    document.getElementById('nBody').innerHTML='';
-    document.getElementById('nTags').value='';
-    document.getElementById('nPinned').checked=false;
-    selectNoteColor(NOTE_COLORS[0]);
-  }
-  document.getElementById('noteModal').classList.add('open');
-}
-function selectNoteColor(c){document.querySelectorAll('.note-color-opt').forEach(el=>{el.classList.toggle('sel',el.dataset.color===c);});document.getElementById('noteModal').dataset.noteColor=c;}
-function nRteCmd(cmd){document.getElementById('nBody').focus();document.execCommand(cmd,false,null);}
-async function saveNote(){
-  const title=document.getElementById('nTitle').value.trim();
-  const body=document.getElementById('nBody').innerHTML.trim();
-  const id=parseInt(document.getElementById('noteEditId').value)||null;
-  const tags=document.getElementById('nTags').value.split(/\s+/).map(s=>s.trim()).filter(Boolean);
-  const color=document.getElementById('noteModal').dataset.noteColor||NOTE_COLORS[0];
-  const pinned=document.getElementById('nPinned').checked;
-  const existing = id ? notes.find(x=>x.id===id) : null;
-  const obj={id:id||null,title,body,color,pinned,tags,updated_at:new Date().toISOString(),
-    pos_x: existing?.pos_x ?? notePositions[id]?.x ?? null,
-    pos_y: existing?.pos_y ?? notePositions[id]?.y ?? null
-  };
-  // Assign a local temp ID if new and sync is off (so board can position it)
-  if(!id && !obj.id){ obj.id = Date.now(); }
-  if(id){const idx=notes.findIndex(x=>x.id===id);if(idx>=0)notes[idx]=obj;else notes.push(obj);}
-  else notes.unshift(obj);
-  await saveNoteToSb(obj); // updates obj.id with real Supabase id when sync is on
-  logAudit(id?'Note Edited':'Note Added', `Note '${(title||'Untitled').slice(0,50)}' ${id?'updated':'created'}`);
-  closeModal('noteModal');renderNotesView();toast(id?'✓ Note updated':'✓ Note added');
-}
-async function deleteNote(id){
-  if(!confirm('Delete this note?'))return;
-  const nid=typeof id==='string'?parseInt(id):id;
-  const _dn=notes.find(n=>n.id===nid||n.id===id);
-  logAudit('Note Deleted',`Note '${((_dn?.title)||'Untitled').slice(0,50)}' deleted`);
-  notes=notes.filter(n=>n.id!==nid&&n.id!==id);
-  await deleteNoteFromSb(id);renderNotesView();toast('Note deleted');
-}
-async function toggleNotePin(id){
-  const n=notes.find(x=>x.id===id||x.id===Number(id));if(!n)return;
-  n.pinned=!n.pinned;n.updated_at=new Date().toISOString();
-  await saveNoteToSb(n);renderNotesView();
-}
-
 // ══════════════════════════════════════════════════════════════
 //  SETTINGS PAGE
 // ══════════════════════════════════════════════════════════════
