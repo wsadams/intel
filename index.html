@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.1                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -268,15 +268,29 @@ td input[type=date].ci{color-scheme:dark;}
 /* ── PRINT / PDF ────────────────────────────────────────────── */
 /* ── NOTES PAGE ─────────────────────────────────────────────── */
 .notes-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-#stickyBoard{position:relative;min-height:400px;background:var(--bg2);border-radius:10px;border:1px solid var(--border);padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-content:flex-start;}
-.sticky{position:relative;width:220px;min-height:140px;border-radius:10px;padding:13px;cursor:grab;transition:box-shadow .15s;word-break:break-word;border:1px solid rgba(255,255,255,.08);}
+#stickyBoard{position:relative;min-height:500px;height:600px;background:var(--bg2);border-radius:10px;border:1px solid var(--border);overflow:hidden;}
+.sticky{position:absolute;width:220px;min-height:140px;border-radius:10px;padding:13px;cursor:grab;transition:box-shadow .15s;word-break:break-word;border:1px solid rgba(255,255,255,.08);user-select:none;}
 .sticky:hover{box-shadow:0 8px 24px rgba(0,0,0,.4);}
-.sticky-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#fff;}
-.sticky-body{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;max-height:120px;overflow:hidden;}
-.sticky-foot{display:flex;justify-content:flex-end;gap:5px;margin-top:8px;}
-.sticky-pin{font-size:11px;cursor:pointer;opacity:.5;transition:opacity .14s;}.sticky-pin:hover{opacity:1;}
-.sticky-del{font-size:11px;cursor:pointer;opacity:.3;transition:all .14s;color:#E74C3C;}.sticky-del:hover{opacity:.8;}
-.sticky-edit{font-size:11px;cursor:pointer;opacity:.4;}.sticky-edit:hover{opacity:.8;}
+.sticky.dragging-note{cursor:grabbing;box-shadow:0 16px 40px rgba(0,0,0,.6);z-index:100;}
+.sticky-editing{cursor:default!important;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.sn-toolbar{display:flex;gap:3px;padding:5px 7px;border-bottom:1px solid rgba(0,0,0,.12);align-items:center;flex-wrap:wrap;}
+.sn-btn{background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 7px;font-size:12px;color:#333;font-family:'DM Sans',sans-serif;transition:background .12s;}
+.sn-btn:hover{background:rgba(0,0,0,.2);}
+.sn-save{background:rgba(0,0,0,.18);font-weight:600;}
+.sn-cancel{background:none;opacity:.5;}.sn-cancel:hover{opacity:1;background:rgba(200,0,0,.1);}
+.sn-title-input{width:100%;border:none;background:transparent;font-size:13px;font-weight:600;padding:7px 10px 3px;outline:none;color:#2a2a2a;font-family:'DM Sans',sans-serif;box-sizing:border-box;}
+.sn-body-edit{min-height:80px;padding:3px 10px 8px;font-size:12px;outline:none;color:rgba(0,0,0,.7);line-height:1.5;font-family:'DM Sans',sans-serif;}
+.sn-body-edit ul,.sn-body-edit ol{padding-left:16px;margin:3px 0;}
+.sticky-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#2a2a2a;}
+.sticky-body{font-size:12px;color:rgba(0,0,0,.65);line-height:1.5;max-height:120px;overflow:hidden;}
+.sticky-body ul,.sticky-body ol{padding-left:16px;margin:4px 0;}
+.sticky-body li{margin-bottom:2px;}
+.sticky-body p{margin-bottom:4px;}
+.sticky-body br{display:block;content:'';margin:2px 0;}
+.sticky-foot{display:flex;justify-content:flex-end;gap:5px;margin-top:8px;border-top:1px solid rgba(0,0,0,.1);padding-top:6px;}
+.sticky-pin{font-size:11px;cursor:pointer;opacity:.5;transition:opacity .14s;color:#333;}.sticky-pin:hover{opacity:1;}
+.sticky-del{font-size:11px;cursor:pointer;opacity:.4;transition:all .14s;color:#c0392b;}.sticky-del:hover{opacity:.9;}
+.sticky-edit{font-size:11px;cursor:pointer;opacity:.4;color:#333;}.sticky-edit:hover{opacity:.8;}
 .notes-table table{width:100%;border-collapse:collapse;}
 .notes-table thead th{padding:9px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:1.3px;border-bottom:1px solid var(--border);}
 .notes-table tbody tr{border-bottom:1px solid rgba(255,255,255,.03);transition:background .1s;}
@@ -285,7 +299,7 @@ td input[type=date].ci{color-scheme:dark;}
 /* note color picker */
 .note-color-opts{display:flex;gap:6px;flex-wrap:wrap;}
 .note-color-opt{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .14s;}
-.note-color-opt.sel{border-color:#fff;transform:scale(1.2);}
+.note-color-opt.sel{border-color:#333;transform:scale(1.2);}
 
 /* ── SETTINGS PAGE ──────────────────────────────────────────── */
 .settings-page{display:flex;flex-direction:column;gap:22px;}
@@ -343,7 +357,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.1</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -512,6 +526,13 @@ td input[type=date].ci{color-scheme:dark;}
         <h3>Phases</h3>
         <div class="inline-list" id="phaseList"></div>
         <div class="s-add"><input type="text" id="newPhaseInput" placeholder="New phase name…"><button class="btn btn-gold btn-sm" onclick="addPhase()">Add</button></div>
+      </div>
+
+      <!-- Phase Colors -->
+      <div class="settings-section">
+        <h3>Phase Colors</h3>
+        <p style="font-size:12px;color:var(--mid);margin-bottom:12px">Click the color swatch to change the accent color for each phase tab and pill.</p>
+        <div id="phaseColorList"></div>
       </div>
 
       <!-- Team Members -->
@@ -695,13 +716,18 @@ td input[type=date].ci{color-scheme:dark;}
         <div class="note-color-opts" id="noteColorOpts"></div>
       </div>
       <div class="field"><label>Body</label>
-        <div style="display:flex;gap:5px;margin-bottom:5px">
-          <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('bold')"><b>B</b></button>
-          <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('italic')"><i>I</i></button>
-          <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('underline')"><u>U</u></button>
-          <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('insertUnorderedList')">• List</button>
+        <div style="background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:7px;overflow:hidden;" id="nBodyWrap">
+          <div style="display:flex;gap:4px;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)">
+            <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('bold')"><b>B</b></button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('italic')"><i>I</i></button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('underline')"><u>U</u></button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('insertUnorderedList')">• List</button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('insertOrderedList')">1. List</button>
+          </div>
+          <div id="nBody" contenteditable="true" style="min-height:100px;padding:10px;font-size:13px;outline:none;line-height:1.6;"
+            onfocus="document.getElementById('nBodyWrap').style.borderColor='var(--acc)'"
+            onblur="document.getElementById('nBodyWrap').style.borderColor='rgba(255,255,255,.1)'"></div>
         </div>
-        <div id="nBody" contenteditable="true" style="min-height:100px;padding:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:7px;font-size:13px;outline:none;line-height:1.6;" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'"></div>
       </div>
       <div class="field"><label>Tags (space-separated)</label><input type="text" id="nTags" placeholder="#meeting #legal…"></div>
       <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer">
@@ -766,7 +792,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1', logoUrl='';
+let appVersion='v2.1.1', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -786,7 +812,9 @@ const PR={'High':{cls:'pri-high',lbl:'High'},'Medium':{cls:'pri-med',lbl:'Med'},
 const PP=['pill-0','pill-1','pill-2','pill-3'];
 const SO=['Not Started','In Progress','On Hold','Complete'];
 
-const NOTE_COLORS=['#1B3A6B','#1B4A2A','#4A1B0C','#2E1B4A','#3A2A0A','#0A2A3A'];
+const NOTE_COLORS=['#F9E4B7','#B5E8D0','#F7C5C5','#C8D8F8','#E8D0F5','#FFF0C0'];
+const DEFAULT_PHASE_COLORS=['#2A5AB5','#1A6B3A','#C45C10','#6B2DAF','#B89010','#1A5A6B'];
+let phaseColors={}; // keyed by phase name
 
 const PALETTES=[
   {id:'gold',   color:'#C9A84C',label:'Gold'},
@@ -846,6 +874,7 @@ async function loadFromSupabase(){
         appVersion = s.app_version || appVersion;
         logoUrl = s.logo_url || '';
         if(s.font_settings) applyFontSettings(s.font_settings);
+        if(s.phase_colors) phaseColors=s.phase_colors;
         if(s.palette) applyPalette(s.palette, false);
         applyBrandingToHeader();
       }
@@ -932,7 +961,8 @@ async function saveSettingsToSb(){
       logoPadding: getComputedStyle(document.documentElement).getPropertyValue('--logo-pad-y').trim(),
       defaultPhase: defaultPhase
     },
-    palette: document.documentElement.dataset.palette||'gold'
+    palette: document.documentElement.dataset.palette||'gold',
+    phase_colors: phaseColors
   };
   try {
     await sbFetch('settings?id=eq.1', {method:'PATCH', body:JSON.stringify(row)});
@@ -943,7 +973,7 @@ async function saveSettingsToSb(){
 
 async function saveNoteToSb(n){
   setSyncDot('saving');
-  const row = {title:n.title||'',body:n.body||'',color:n.color||NOTE_COLORS[0],pinned:!!n.pinned,tags:n.tags||[]};
+  const row = {title:n.title||'',body:n.body||'',color:n.color||NOTE_COLORS[0],pinned:!!n.pinned,tags:n.tags||[],pos_x:n.pos_x??null,pos_y:n.pos_y??null};
   try {
     if(n.id && typeof n.id === 'number' && n.id > 0){
       await sbFetch(`notes?id=eq.${n.id}`, {method:'PATCH', body:JSON.stringify(row)});
@@ -1054,7 +1084,7 @@ function goPage(page, el){
   if(el)el.classList.add('active');
   document.getElementById('viewToggle').style.display=page==='planner'?'':'none';
   if(page==='settings')loadSettingsPage();
-  if(page==='notes')renderNotesView();
+  if(page==='notes')setTimeout(()=>renderNotesView(),30);
 }
 function switchPlannerTab(tab,el){
   if(currentPage!=='planner'){goPage('planner',null);}
@@ -1604,7 +1634,167 @@ function toggleBlockerPanel(){blockerPanelCollapsed=!blockerPanelCollapsed;docum
 // ══════════════════════════════════════════════════════════════
 //  NOTES PAGE
 // ══════════════════════════════════════════════════════════════
-const NOTE_COLOR_LABELS=['Navy','Forest','Rust','Purple','Bronze','Teal'];
+const NOTE_COLOR_LABELS=['Yellow','Mint','Pink','Blue','Lavender','Cream'];
+function setNotesView(v,el){notesView=v;document.querySelectorAll('#notesBoardBtn,#notesTableBtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('notesBoardView').style.display=v==='board'?'block':'none';document.getElementById('notesTableView').style.display=v==='table'?'block':'none';renderNotesView();}
+function renderNotesView(){
+  const q=(document.getElementById('noteSearch')?.value||'').toLowerCase();
+  const filtered=q?notes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.body||'').replace(/<[^>]+>/g,' ').toLowerCase().includes(q)):notes;
+  if(notesView==='board')renderStickyBoard(filtered);else renderNotesTable(filtered);
+  updateTabCounts();
+}
+// Store note positions for drag — persists across renders
+let notePositions={};
+let activeNoteEdit=null;
+let _sDrag=null,_sDragOffX=0,_sDragOffY=0;
+
+// ── STICKY BOARD ──────────────────────────────────────────────
+function renderStickyBoard(filtered){
+  const board=document.getElementById('stickyBoard');
+  if(!board)return;
+  if(!filtered.length){
+    board.innerHTML='<div style="position:absolute;color:var(--mid);font-size:13px;padding:20px">No notes yet. Click + Add Note.</div>';
+    return;
+  }
+  const sorted=[...filtered].sort((a,b)=>(b.pinned||0)-(a.pinned||0));
+  // Use real width or a safe fallback of 760
+  const W=board.getBoundingClientRect().width||760;
+  const cW=220,cH=200,gap=14;
+  const cols=Math.max(1,Math.floor((W+gap)/(cW+gap)));
+  board.innerHTML='';
+  let maxBottom=500;
+  sorted.forEach((n,i)=>{
+    // Only set default position if we don't already have one
+    if(notePositions[n.id]==null){
+      if(n.pos_x!=null&&n.pos_y!=null){
+        notePositions[n.id]={x:n.pos_x,y:n.pos_y};
+      } else {
+        const col=i%cols, row=Math.floor(i/cols);
+        notePositions[n.id]={x:gap+col*(cW+gap), y:gap+row*(cH+gap)};
+      }
+    }
+    const pos=notePositions[n.id];
+    maxBottom=Math.max(maxBottom,pos.y+cH+gap+30);
+    const card=createStickyCard(n,pos,cW);
+    board.appendChild(card);
+  });
+  board.style.minHeight=maxBottom+'px';
+}
+
+function createStickyCard(n,pos,cW){
+  const isEditing=(activeNoteEdit===n.id);
+  const card=document.createElement('div');
+  card.className='sticky'+(isEditing?' sticky-editing':'');
+  card.dataset.id=String(n.id);
+  card.style.cssText=`background:${n.color||NOTE_COLORS[0]};left:${pos.x}px;top:${pos.y}px;width:${cW}px`;
+
+  if(isEditing){
+    // ── EDIT MODE ──
+    card.innerHTML=`
+      <div class="sn-toolbar">
+        <button class="sn-btn" onmousedown="event.preventDefault()" onclick="stickyFmt('bold')"><b>B</b></button>
+        <button class="sn-btn" onmousedown="event.preventDefault()" onclick="stickyFmt('italic')"><i>I</i></button>
+        <button class="sn-btn" onmousedown="event.preventDefault()" onclick="stickyFmt('underline')"><u>U</u></button>
+        <button class="sn-btn" onmousedown="event.preventDefault()" onclick="stickyFmt('insertUnorderedList')">• List</button>
+        <div style="flex:1"></div>
+        <button class="sn-btn sn-save" onmousedown="event.preventDefault()" onclick="saveStickyInline(${n.id})">Save</button>
+        <button class="sn-btn sn-cancel" onmousedown="event.preventDefault()" onclick="cancelStickyEdit()">✕</button>
+      </div>
+      <input id="sei-title-${n.id}" class="sn-title-input" value="${esc(n.title||'')}" placeholder="Title…">
+      <div id="sei-body-${n.id}" class="sn-body-edit" contenteditable="true">${n.body||''}</div>
+      <div class="sticky-foot">
+        <span class="sticky-pin" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();toggleNotePin(${n.id})">${n.pinned?'📌':'📍'}</span>
+        <span class="sticky-del" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();deleteNote(${n.id})">✕</span>
+      </div>`;
+    // Focus at end of body after render
+    setTimeout(()=>{
+      const b=document.getElementById('sei-body-'+n.id);
+      if(b){b.focus();const r=document.createRange();r.selectNodeContents(b);r.collapse(false);const s=window.getSelection();s.removeAllRanges();s.addRange(r);}
+    },30);
+  } else {
+    // ── VIEW MODE ──
+    const tags=(n.tags||[]).map(t=>`<span style="display:inline-block;padding:1px 6px;border-radius:99px;font-size:10px;background:rgba(0,0,0,.1);color:#333;margin:1px">${esc(t)}</span>`).join('');
+    card.innerHTML=`
+      <div class="sticky-title">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</div>
+      <div class="sticky-body" style="max-height:110px;overflow:hidden">${n.body||'<em style="opacity:.35;font-size:11px">Empty — click to edit</em>'}</div>
+      ${tags?`<div style="margin-top:5px">${tags}</div>`:''}
+      <div class="sticky-foot">
+        <span class="sticky-pin" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();toggleNotePin(${n.id})">${n.pinned?'📌':'📍'}</span>
+        <span class="sticky-del" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();deleteNote(${n.id})">✕</span>
+      </div>`;
+    // Click card to edit
+    card.addEventListener('click', ()=>{ activeNoteEdit=n.id; renderNotesView(); });
+  }
+  // Drag handler — only in view mode
+  if(!isEditing) card.addEventListener('mousedown', stickyMouseDown);
+  return card;
+}
+
+// Formatting inside inline editor
+function stickyFmt(cmd){
+  if(!activeNoteEdit)return;
+  const b=document.getElementById('sei-body-'+activeNoteEdit);
+  if(b){b.focus();document.execCommand(cmd,false,null);}
+}
+
+function cancelStickyEdit(){
+  activeNoteEdit=null;
+  renderNotesView();
+}
+
+async function saveStickyInline(id){
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=document.getElementById('sei-title-'+id);
+  const b=document.getElementById('sei-body-'+id);
+  if(t)n.title=t.value.trim();
+  if(b)n.body=b.innerHTML;
+  n.updated_at=new Date().toISOString();
+  activeNoteEdit=null;
+  await saveNoteToSb(n);
+  logAudit('Note Edited',`Note '${(n.title||'Untitled').slice(0,50)}' updated`);
+  renderNotesView();
+  toast('✓ Saved');
+}
+
+// ── STICKY DRAG ───────────────────────────────────────────────
+function stickyMouseDown(e){
+  // Only drag from card surface, not buttons/pins/delete
+  if(e.target.tagName==='BUTTON'||e.target.closest('.sticky-foot'))return;
+  const card=e.currentTarget;
+  _sDrag=card;
+  const rect=card.getBoundingClientRect();
+  _sDragOffX=e.clientX-rect.left;
+  _sDragOffY=e.clientY-rect.top;
+  card.style.zIndex=99;
+  card.style.cursor='grabbing';
+  e.preventDefault();
+}
+document.addEventListener('mousemove',e=>{
+  if(!_sDrag)return;
+  const board=document.getElementById('stickyBoard');if(!board)return;
+  const br=board.getBoundingClientRect();
+  const x=Math.max(0,e.clientX-br.left-_sDragOffX);
+  const y=Math.max(0,e.clientY-br.top-_sDragOffY);
+  _sDrag.style.left=x+'px';
+  _sDrag.style.top=y+'px';
+  const id=parseInt(_sDrag.dataset.id);
+  notePositions[id]={x,y};
+});
+document.addEventListener('mouseup',async e=>{
+  if(!_sDrag)return;
+  _sDrag.style.zIndex='';
+  _sDrag.style.cursor='';
+  const id=parseInt(_sDrag.dataset.id);
+  const pos=notePositions[id];
+  if(pos){
+    const n=notes.find(x=>x.id===id);
+    if(n){n.pos_x=Math.round(pos.x);n.pos_y=Math.round(pos.y);await saveNoteToSb(n);}
+  }
+  _sDrag=null;
+});
+
+// ══════════════════════════════════════════════════════════════
+//  NOTES PAGE
+// ══════════════════════════════════════════════════════════════
 function setNotesView(v,el){notesView=v;document.querySelectorAll('#notesBoardBtn,#notesTableBtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('notesBoardView').style.display=v==='board'?'block':'none';document.getElementById('notesTableView').style.display=v==='table'?'block':'none';renderNotesView();}
 function renderNotesView(){
   const q=(document.getElementById('noteSearch')?.value||'').toLowerCase();
@@ -1614,23 +1804,117 @@ function renderNotesView(){
 }
 function renderStickyBoard(filtered){
   const board=document.getElementById('stickyBoard');if(!board)return;
-  if(!filtered.length){board.innerHTML='<div style="color:var(--mid);font-size:13px;padding:20px">No notes yet. Click + Add Note to begin.</div>';return;}
+  if(!filtered.length){
+    board.innerHTML='<div style="color:var(--mid);font-size:13px;padding:20px;position:absolute">No notes yet. Click + Add Note to begin.</div>';
+    return;
+  }
   const sorted=[...filtered].sort((a,b)=>(b.pinned||0)-(a.pinned||0));
-  board.innerHTML=sorted.map(n=>{
-    const snippet=(n.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,120);
-    const tags=(n.tags||[]).map(t=>`<span class="tag-chip" style="font-size:10px">${esc(t)}</span>`).join('');
-    return`<div class="sticky" style="background:${n.color||NOTE_COLORS[0]}">
-      <div class="sticky-title">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</div>
-      <div class="sticky-body">${snippet||'<em style="opacity:.5">No content</em>'}</div>
-      ${tags?`<div style="margin-top:6px">${tags}</div>`:''}
-      <div class="sticky-foot">
-        <span class="sticky-pin" onclick="toggleNotePin(${n.id})" title="${n.pinned?'Unpin':'Pin'}">${n.pinned?'📌':'📍'}</span>
-        <span class="sticky-edit" onclick="openNoteModal(${n.id})">✏</span>
-        <span class="sticky-del" onclick="deleteNote(${n.id})">✕</span>
-      </div>
-    </div>`;
-  }).join('');
+  // Use a fixed width for grid calc since board may be hidden on first render
+  const boardW = board.offsetWidth > 50 ? board.offsetWidth : 760;
+  const cardW = 234, cardH = 210, gap = 16;
+  const cols = Math.max(1, Math.floor((boardW - gap) / (cardW + gap)));
+  board.innerHTML='';
+  sorted.forEach((n,i)=>{
+    if(!notePositions[n.id]){
+      if(n.pos_x!=null && n.pos_y!=null){
+        notePositions[n.id]={x:n.pos_x,y:n.pos_y};
+      } else {
+        const col=i%cols;
+        const row=Math.floor(i/cols);
+        notePositions[n.id]={x:gap+col*(cardW+gap), y:gap+row*(cardH+gap)};
+      }
+    }
+    const pos=notePositions[n.id];
+    const tags=(n.tags||[]).map(t=>`<span class="tag-chip" style="font-size:10px;color:#333;background:rgba(0,0,0,.12);border-color:rgba(0,0,0,.15)">${esc(t)}</span>`).join('');
+    const isEditing = activeNoteEdit===n.id;
+    const el=document.createElement('div');
+    el.className='sticky'+(isEditing?' sticky-editing':'');
+    el.dataset.id=n.id;
+    el.style.cssText=`background:${n.color||NOTE_COLORS[0]};left:${pos.x}px;top:${pos.y}px;width:${cardW}px`;
+    if(isEditing){
+      el.innerHTML=`
+        <div style="display:flex;gap:3px;padding:5px 6px 5px;border-bottom:1px solid rgba(0,0,0,.12);flex-wrap:wrap">
+          <button type="button" onclick="stickyFmt('bold')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;font-weight:700;color:#333">B</button>
+          <button type="button" onclick="stickyFmt('italic')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;font-style:italic;color:#333">I</button>
+          <button type="button" onclick="stickyFmt('underline')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;text-decoration:underline;color:#333">U</button>
+          <button type="button" onclick="stickyFmt('insertUnorderedList')" style="background:rgba(0,0,0,.1);border:none;border-radius:3px;cursor:pointer;padding:2px 6px;font-size:12px;color:#333">• List</button>
+          <div style="flex:1"></div>
+          <button type="button" onclick="saveStickyEdit(${n.id})" style="background:rgba(0,0,0,.2);border:none;border-radius:3px;cursor:pointer;padding:2px 7px;font-size:11px;font-weight:600;color:#333">Save</button>
+          <button type="button" onclick="cancelStickyEdit()" style="background:none;border:none;cursor:pointer;padding:2px 5px;font-size:11px;color:#555">✕</button>
+        </div>
+        <input id="stickyTitleEdit-${n.id}" value="${esc(n.title||'')}" placeholder="Title…"
+          style="width:100%;border:none;background:transparent;font-size:13px;font-weight:600;padding:8px 10px 4px;outline:none;color:#2a2a2a;font-family:'DM Sans',sans-serif">
+        <div id="stickyBodyEdit-${n.id}" contenteditable="true"
+          style="min-height:80px;padding:4px 10px 8px;font-size:12px;outline:none;color:rgba(0,0,0,.7);line-height:1.5;font-family:'DM Sans',sans-serif"
+          >${n.body||''}</div>
+        <div class="sticky-foot">
+          <span class="sticky-pin" onclick="event.stopPropagation();toggleNotePin(${n.id})">${n.pinned?'📌':'📍'}</span>
+          <span class="sticky-del" onclick="event.stopPropagation();deleteNote(${n.id})">✕</span>
+        </div>`;
+      // Focus body for immediate typing
+      setTimeout(()=>{
+        const body=document.getElementById('stickyBodyEdit-'+n.id);
+        if(body){body.focus();const range=document.createRange();range.selectNodeContents(body);range.collapse(false);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);}
+      },50);
+    } else {
+      el.innerHTML=`
+        <div class="sticky-title">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</div>
+        <div class="sticky-body" style="max-height:120px;overflow:hidden">${n.body||'<em style="opacity:.4">No content</em>'}</div>
+        ${tags?`<div style="margin-top:6px">${tags}</div>`:''}
+        <div class="sticky-foot">
+          <span class="sticky-pin" onclick="event.stopPropagation();toggleNotePin(${n.id})">${n.pinned?'📌':'📍'}</span>
+          <span style="font-size:11px;cursor:pointer;opacity:.4;color:#333" onclick="event.stopPropagation();openStickyEdit(${n.id})" title="Edit">✏</span>
+          <span class="sticky-del" onclick="event.stopPropagation();deleteNote(${n.id})">✕</span>
+        </div>`;
+      // Click card body to start editing
+      el.addEventListener('click', (e)=>{
+        if(e.target.classList.contains('sticky-pin')||e.target.classList.contains('sticky-del')||e.target.tagName==='SPAN')return;
+        openStickyEdit(n.id);
+      });
+    }
+    el.addEventListener('mousedown', stickyDragStart);
+    board.appendChild(el);
+  });
+  // Update board min-height to fit all notes
+  if(sorted.length){
+    const rows=Math.ceil(sorted.length/cols);
+    const minH=gap+rows*(cardH+gap)+40;
+    board.style.minHeight=Math.max(500,minH)+'px';
+  }
 }
+
+function stickyFmt(cmd){
+  const id=activeNoteEdit;if(!id)return;
+  const el=document.getElementById('stickyBodyEdit-'+id);
+  if(el){el.focus();document.execCommand(cmd,false,null);}
+}
+
+function openStickyEdit(id){
+  activeNoteEdit=id;
+  renderNotesView();
+}
+
+function cancelStickyEdit(){
+  activeNoteEdit=null;
+  renderNotesView();
+}
+
+async function saveStickyEdit(id){
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const titleEl=document.getElementById('stickyTitleEdit-'+id);
+  const bodyEl=document.getElementById('stickyBodyEdit-'+id);
+  if(titleEl) n.title=titleEl.value.trim();
+  if(bodyEl) n.body=bodyEl.innerHTML;
+  n.updated_at=new Date().toISOString();
+  activeNoteEdit=null;
+  await saveNoteToSb(n);
+  logAudit('Note Edited',`Note '${(n.title||'Untitled').slice(0,50)}' updated`);
+  renderNotesView();
+  toast('✓ Note saved');
+}
+
+
+
 function renderNotesTable(filtered){
   const tbody=document.getElementById('notesTbody');if(!tbody)return;
   if(!filtered.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:22px;color:var(--mid)">No notes yet.</td></tr>`;return;}
@@ -1654,7 +1938,7 @@ function openNoteModal(id=null){
   document.getElementById('noteEditId').value=id||'';
   // build color opts
   const copts=document.getElementById('noteColorOpts');
-  copts.innerHTML=NOTE_COLORS.map((c,i)=>`<div class="note-color-opt ${id?'':''}()" style="background:${c}" data-color="${c}" onclick="selectNoteColor('${c}')" title="${NOTE_COLOR_LABELS[i]}"></div>`).join('');
+  copts.innerHTML=NOTE_COLORS.map((c,i)=>`<div class="note-color-opt" style="background:${c}" data-color="${c}" onclick="selectNoteColor('${c}')" title="${NOTE_COLOR_LABELS[i]}"></div>`).join('');
   if(id){
     const n=notes.find(x=>x.id===id);if(!n)return;
     document.getElementById('nTitle').value=n.title||'';
@@ -1680,19 +1964,29 @@ async function saveNote(){
   const tags=document.getElementById('nTags').value.split(/\s+/).map(s=>s.trim()).filter(Boolean);
   const color=document.getElementById('noteModal').dataset.noteColor||NOTE_COLORS[0];
   const pinned=document.getElementById('nPinned').checked;
-  const obj={id:id||null,title,body,color,pinned,tags,updated_at:new Date().toISOString()};
+  const existing = id ? notes.find(x=>x.id===id) : null;
+  const obj={id:id||null,title,body,color,pinned,tags,updated_at:new Date().toISOString(),
+    pos_x: existing?.pos_x ?? notePositions[id]?.x ?? null,
+    pos_y: existing?.pos_y ?? notePositions[id]?.y ?? null
+  };
+  // Assign a local temp ID if new and sync is off (so board can position it)
+  if(!id && !obj.id){ obj.id = Date.now(); }
   if(id){const idx=notes.findIndex(x=>x.id===id);if(idx>=0)notes[idx]=obj;else notes.push(obj);}
   else notes.unshift(obj);
-  await saveNoteToSb(obj);
+  await saveNoteToSb(obj); // updates obj.id with real Supabase id when sync is on
+  logAudit(id?'Note Edited':'Note Added', `Note '${(title||'Untitled').slice(0,50)}' ${id?'updated':'created'}`);
   closeModal('noteModal');renderNotesView();toast(id?'✓ Note updated':'✓ Note added');
 }
 async function deleteNote(id){
   if(!confirm('Delete this note?'))return;
-  notes=notes.filter(n=>n.id!==id);
+  const nid=typeof id==='string'?parseInt(id):id;
+  const _dn=notes.find(n=>n.id===nid||n.id===id);
+  logAudit('Note Deleted',`Note '${((_dn?.title)||'Untitled').slice(0,50)}' deleted`);
+  notes=notes.filter(n=>n.id!==nid&&n.id!==id);
   await deleteNoteFromSb(id);renderNotesView();toast('Note deleted');
 }
 async function toggleNotePin(id){
-  const n=notes.find(x=>x.id===id);if(!n)return;
+  const n=notes.find(x=>x.id===id||x.id===Number(id));if(!n)return;
   n.pinned=!n.pinned;n.updated_at=new Date().toISOString();
   await saveNoteToSb(n);renderNotesView();
 }
@@ -1719,6 +2013,7 @@ function loadSettingsPage(){
   pg.innerHTML=PALETTES.map(p=>`<div class="pal-chip ${document.documentElement.dataset.palette===p.id?'sel':''}" style="background:${p.color}" title="${p.label}" data-pid="${p.id}" onclick="applyPalette('${p.id}',true)"></div>`).join('');
   // Phases
   renderSList('phaseList',phases,'phase');
+  renderPhaseColorSettings();
   // People
   renderSList('peopleList',people,'person');
   // Tags
@@ -1801,7 +2096,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.1</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -1809,7 +2104,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1';
+  appVersion='v2.1.1';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   applyBrandingToHeader();
@@ -1831,7 +2126,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.1</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -1857,11 +2152,38 @@ function applyFontSettings(fs){
   if(fs.bodyWeight)document.documentElement.style.setProperty('--body-weight',fs.bodyWeight);
   if(fs.logoPadding!==undefined) applyLogoPadding(fs.logoPadding);
   if(fs.defaultPhase) defaultPhase=fs.defaultPhase;
+  if(fs.phaseColors) phaseColors=fs.phaseColors;
 }
 function applyPalette(pid,save=false){
   document.documentElement.dataset.palette=pid;
   document.querySelectorAll('.pal-chip').forEach(c=>c.classList.toggle('sel',c.dataset.pid===pid));
   if(save)saveSettingsToSb();
+}
+function getPhaseColor(phase){
+  if(phaseColors[phase]) return phaseColors[phase];
+  const idx=phases.indexOf(phase);
+  return DEFAULT_PHASE_COLORS[idx>=0?idx%DEFAULT_PHASE_COLORS.length:0]||'#4A8CF7';
+}
+function setPhaseColor(phase,color){
+  phaseColors[phase]=color;
+  saveSettingsToSb();
+  buildTabs();renderTable();if(currentView==='kanban')renderKanban();
+  renderPhaseColorSettings();
+  toast(`✓ Color updated for ${phase}`);
+}
+function renderPhaseColorSettings(){
+  const el=document.getElementById('phaseColorList');if(!el)return;
+  el.innerHTML=phases.map(p=>{
+    const col=getPhaseColor(p);
+    return`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;margin-bottom:5px">
+      <span style="font-size:13px">${esc(p)}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:20px;height:20px;border-radius:50%;background:${col};border:2px solid rgba(255,255,255,.2)"></div>
+        <input type="color" value="${col}" onchange="setPhaseColor('${esc(p)}',this.value)"
+          style="width:32px;height:24px;border:none;background:none;cursor:pointer;padding:0;border-radius:4px">
+      </div>
+    </div>`;
+  }).join('');
 }
 function toggleSupabase(enabled){
   supabaseEnabled = enabled;
@@ -2028,7 +2350,10 @@ function rebuildAll(){buildTabs();buildStats();buildFilters();renderTable();if(c
 //  TOAST
 // ══════════════════════════════════════════════════════════════
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);}
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+document.querySelectorAll('.overlay').forEach(o=>{
+  if(o.id==='noteModal')return; // note modal only closes on Save/Cancel
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){
     if(e.target.id==='newPhaseInput')addPhase();
@@ -2338,9 +2663,11 @@ function selectUser(name){
   currentUser = name;
   localStorage.setItem('hw_user', name);
   document.getElementById('whoModal').classList.remove('open');
-  // Update the user chip in header
   const chip = document.getElementById('userChip');
   if(chip) chip.textContent = '👤 ' + name;
+  // Default owner filter to this user
+  const fo=document.getElementById('filterOwner');
+  if(fo){ fo.value=name; renderTable(); }
   toast(`✓ Signed in as ${name}`);
   logAudit('Session', `${name} opened the dashboard`);
 }
@@ -2365,6 +2692,11 @@ async function init(){
   // Set user chip in header
   const chip=document.getElementById('userChip');
   if(chip) chip.textContent = currentUser ? '👤 '+currentUser : '👤 —';
+  // Default owner filter to logged-in user
+  if(currentUser){
+    const fo=document.getElementById('filterOwner');
+    if(fo) fo.value=currentUser;
+  }
   // Show who-are-you modal if not set
   if(!currentUser) openWhoModal();
   // Subscribe to realtime polling
