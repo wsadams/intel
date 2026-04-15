@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.3                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.4                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -254,10 +254,13 @@ td input[type=date].ci{color-scheme:dark;}
 /* ── MODALS ─────────────────────────────────────────────────── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);z-index:1000;align-items:center;justify-content:center;}
 .overlay.open{display:flex;}
-.modal{background:#152134;border:1px solid rgba(255,255,255,.1);border-radius:14px;width:580px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.65);}
+.modal{background:#152134;border:1px solid rgba(255,255,255,.1);border-radius:14px;width:580px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.65);display:flex;flex-direction:column;}
 .mhdr{padding:18px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+#nBody ul,#nBody ol{padding-left:20px;margin:4px 0;}
+#nBody li{margin-bottom:3px;}
+#nBody p{margin-bottom:4px;}
 .mhdr h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;}
-.mbody{padding:18px 20px;display:flex;flex-direction:column;gap:12px;}
+.mbody{padding:18px 20px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;flex:1;min-height:0;}
 .mfoot{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
 .field{display:flex;flex-direction:column;gap:5px;}
 .field label{font-size:10px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:1.5px;}
@@ -361,7 +364,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.3</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.4</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -727,7 +730,7 @@ td input[type=date].ci{color-scheme:dark;}
             <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('insertUnorderedList')">• List</button>
             <button type="button" class="btn btn-ghost btn-xs" onclick="nRteCmd('insertOrderedList')">1. List</button>
           </div>
-          <div id="nBody" contenteditable="true" style="min-height:100px;padding:10px;font-size:13px;outline:none;line-height:1.6;"
+          <div id="nBody" contenteditable="true" style="min-height:120px;max-height:320px;overflow-y:auto;padding:10px 10px 10px 28px;font-size:13px;outline:none;line-height:1.6;"
             onfocus="document.getElementById('nBodyWrap').style.borderColor='var(--acc)'"
             onblur="document.getElementById('nBodyWrap').style.borderColor='rgba(255,255,255,.1)'"></div>
         </div>
@@ -801,7 +804,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.3', logoUrl='';
+let appVersion='v2.1.4', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -2035,7 +2038,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.3</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.4</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2043,7 +2046,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.3';
+  appVersion='v2.1.4';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   applyBrandingToHeader();
@@ -2065,7 +2068,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.3</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.4</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
