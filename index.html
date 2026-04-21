@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.14                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.15                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -374,7 +374,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.14</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.15</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -843,7 +843,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.14', logoUrl='';
+let appVersion='v2.1.15', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -853,7 +853,7 @@ let defaultPhase='Phase 1';
 let sortCol=null, sortDir=1, sortByOrder=false;
 let dragSrcId=null, kbDragId=null, expanded=new Set();
 let undoStack=[], redoStack=[], MAX_UNDO=30;
-let noteTaskId=null, notesView='table', blockerPanelCollapsed=false;
+let noteTaskId=null, notesView='table', blockerPanelCollapsed=true;
 let notesSortCol='id', notesSortDir=-1; // default: ID desc
 let ownerDropdownOpen=false, sDragIdx=null, sDragType=null;
 let _tagSuggestIdx=-1;
@@ -936,6 +936,8 @@ async function loadFromSupabase(){
     if(lsPalette) applyPalette(lsPalette, false);
     const lsPhaseColors=localStorage.getItem('shw_phase_colors');
     if(lsPhaseColors){ try{phaseColors=JSON.parse(lsPhaseColors);}catch(e){} }
+    const lsLogoPad=localStorage.getItem('shw_logo_padding');
+    if(lsLogoPad) applyLogoPadding(lsLogoPad);
     // Load tasks
     const tr = await sbFetch('tasks?order=order_val.asc');
     if(tr.ok){
@@ -1006,9 +1008,11 @@ async function deleteTaskFromSb(t){
 async function saveSettingsToSb(){
   if(!supabaseEnabled) return;
   setSyncDot('saving');
-  // phase_colors and palette are stored locally — not all Supabase schemas have these columns
+  // phase_colors, palette, and logo padding stored locally — not all Supabase schemas have these columns
   localStorage.setItem('shw_palette', document.documentElement.dataset.palette||'gold');
   localStorage.setItem('shw_phase_colors', JSON.stringify(phaseColors));
+  const padVal=document.getElementById('fsLogoPadding')?.value||getComputedStyle(document.documentElement).getPropertyValue('--logo-pad-y').trim().replace('px','')||'0';
+  localStorage.setItem('shw_logo_padding', padVal);
   const row = {
     id:1, app_title:appTitle, app_subtitle:appSubtitle,
     logo_url:logoUrl, phases, people, tags:allTags,
@@ -1018,7 +1022,6 @@ async function saveSettingsToSb(){
       subtitleSize: getComputedStyle(document.documentElement).getPropertyValue('--subtitle-size').trim(),
       tableSize: getComputedStyle(document.documentElement).getPropertyValue('--table-size').trim(),
       bodyWeight: getComputedStyle(document.documentElement).getPropertyValue('--body-weight').trim(),
-      logoPadding: getComputedStyle(document.documentElement).getPropertyValue('--logo-pad-y').trim(),
       defaultPhase: defaultPhase
     }
   };
@@ -1032,11 +1035,12 @@ async function saveSettingsToSb(){
       console.error('Settings save failed — status:', r.status, '— body:', errText);
       setSyncDot('error');
       toast(`⚠️ Settings save failed (${r.status}) — see browser console for details.`);
-      return;
+      return false;
     }
     setSyncDot('synced'); showSavedFlash();
     logAudit('Settings Saved', 'App settings updated');
-  } catch(e){ setSyncDot('error'); console.warn('saveSettingsToSb error:', e); toast('⚠️ Settings save error — check connection.'); }
+    return true;
+  } catch(e){ setSyncDot('error'); console.warn('saveSettingsToSb error:', e); toast('⚠️ Settings save error — check connection.'); return false; }
 }
 
 
@@ -1854,6 +1858,9 @@ function updateBlockerPanel(){
   const total=blocked.length+dependent.length;
   if(total===0){panel.style.display='none';return;}
   panel.style.display='block';
+  // Apply collapsed state
+  document.getElementById('blockerPanelBody').style.display=blockerPanelCollapsed?'none':'block';
+  document.getElementById('blockerPanelToggle').textContent=blockerPanelCollapsed?'▶ expand':'▼ collapse';
   if(title)title.textContent=`Blockers & Dependencies (${total} item${total!==1?'s':''})`;
   let html='';
   if(blocked.length){
@@ -1867,6 +1874,18 @@ function updateBlockerPanel(){
     html+='</div>';
   }
   content.innerHTML=html;
+  // Highlight blocker rows in the table with a red tint
+  const blockerIds=new Set(blocked.map(t=>t.id));
+  document.querySelectorAll('tbody tr[data-id]').forEach(row=>{
+    const id=parseInt(row.dataset.id);
+    if(blockerIds.has(id)){
+      row.style.background='rgba(224,82,82,.08)';
+      row.style.boxShadow='inset 3px 0 0 rgba(224,82,82,.5)';
+    } else if(!row.classList.contains('sub-row')){
+      row.style.background='';
+      row.style.boxShadow='';
+    }
+  });
 }
 function toggleBlockerPanel(){blockerPanelCollapsed=!blockerPanelCollapsed;document.getElementById('blockerPanelBody').style.display=blockerPanelCollapsed?'none':'block';document.getElementById('blockerPanelToggle').textContent=blockerPanelCollapsed?'▶ expand':'▼ collapse';}
 
@@ -2219,11 +2238,19 @@ async function removeNoteTag(tag){
   renderSettingsNoteTags();renderNotesView();
   toast(`✓ Removed "${tag}" from ${changed} note(s)`);
 }
+function addNoteTagFromSettings(){
+  let v=document.getElementById('newNoteTagInput').value.trim();
+  if(!v)return;
+  v=v.replace(/^([^#])/,'#$1');
+  // Note tags only exist on notes themselves — warn user it must be assigned to a note
+  document.getElementById('newNoteTagInput').value='';
+  toast(`ℹ "${v}" will appear here once assigned to a note`);
+}
 function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.14</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.15</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2231,11 +2258,15 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.14';
+  appVersion='v2.1.15';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
+  // Save logo padding into localStorage so it persists
+  const padVal=document.getElementById('fsLogoPadding')?.value||'0';
+  localStorage.setItem('shw_logo_padding', padVal);
   applyBrandingToHeader();
-  await saveSettingsToSb();toast('✓ Branding saved');
+  const ok=await saveSettingsToSb();
+  if(ok!==false) toast('✓ Branding saved');
 }
 function applyLogoPadding(val){
   const px = parseInt(val)||0;
@@ -2253,7 +2284,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.14</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.15</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
