@@ -135,6 +135,14 @@ tbody tr{border-bottom:1px solid rgba(255,255,255,.03);transition:background .1s
 tbody tr:hover{background:rgba(255,255,255,.025);}
 tbody tr:last-child{border-bottom:none;}
 td{padding:7px 7px;vertical-align:middle;font-size:var(--table-size);color:rgba(255,255,255,.83);overflow:hidden;text-overflow:ellipsis;}
+/* Note view modal body — preserve rich text list formatting */
+#noteViewBody ul,#noteViewBody ol{padding-left:22px;margin:6px 0;}
+#noteViewBody ul{list-style:disc;}
+#noteViewBody ol{list-style:decimal;}
+#noteViewBody li{margin:3px 0;line-height:1.6;}
+#noteViewBody p{margin:4px 0;}
+#noteViewBody strong,#noteViewBody b{font-weight:600;}
+#noteViewBody em,#noteViewBody i{font-style:italic;}
 /* done row */
 tbody tr.row-done td{color:rgba(255,255,255,.22)!important;text-decoration:line-through;}
 tbody tr.row-done .phase-pill,tbody tr.row-done .owner-tag,tbody tr.row-done .status-pill,tbody tr.row-done .pri-dot{opacity:.28;}
