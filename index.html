@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.7                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.8                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -366,7 +366,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.7</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.8</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -806,14 +806,14 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.7', logoUrl='';
+let appVersion='v2.1.8', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
 let auditLog=[];
 let supabaseEnabled=true; // set to false in Settings to suppress errors when previewing locally
 let defaultPhase='Phase 1';
-let sortCol=null, sortDir=1, sortByOrder=true;
+let sortCol=null, sortDir=1, sortByOrder=false;
 let dragSrcId=null, kbDragId=null, expanded=new Set();
 let undoStack=[], redoStack=[], MAX_UNDO=30;
 let noteTaskId=null, notesView='table', blockerPanelCollapsed=false;
@@ -1311,7 +1311,18 @@ function renderTable(){
   if(!tbody)return;
   let vis=getVisible();
   if(!sortByOrder&&sortCol){vis=[...vis].sort((a,b)=>{if(sortCol==='id')return sortDir*(a.id-b.id);return sortDir*String(Array.isArray(a[sortCol])?a[sortCol].join(','):a[sortCol]||'').localeCompare(String(Array.isArray(b[sortCol])?b[sortCol].join(','):b[sortCol]||''));});}
-  else vis=[...vis].sort((a,b)=>a.order-b.order);
+  else if(sortByOrder){vis=[...vis].sort((a,b)=>a.order-b.order);}
+  else {
+    // Default smart sort: Due Date asc (blanks last), then Priority, then ID desc
+    const PRI={'High':0,'Medium':1,'Low':2,'':3};
+    vis=[...vis].sort((a,b)=>{
+      const ad=a.dueDate||'', bd=b.dueDate||'';
+      if(ad!==bd){if(!ad)return 1;if(!bd)return -1;return ad<bd?-1:1;}
+      const ap=PRI[a.priority||'']??3, bp=PRI[b.priority||'']??3;
+      if(ap!==bp)return ap-bp;
+      return b.id-a.id;
+    });
+  }
   if(!vis.length){tbody.innerHTML=`<tr><td colspan="16"><div class="empty"><div class="ei">📋</div>No tasks found.</div></td></tr>`;updateStats();return;}
   let html='';
   vis.forEach((t,idx)=>{
@@ -2066,7 +2077,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.7</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.8</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2074,7 +2085,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.7';
+  appVersion='v2.1.8';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   applyBrandingToHeader();
@@ -2096,7 +2107,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.7</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.8</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
