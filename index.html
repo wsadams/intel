@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.8                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.10                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -366,7 +366,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.8</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.10</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -467,9 +467,12 @@ td input[type=date].ci{color-scheme:dark;}
     <div id="notesTableView" class="notes-table">
       <div class="tbl-wrap">
         <table><thead><tr>
-          <th style="width:30px">#</th><th>Title</th><th>Preview</th>
-          <th style="width:100px">Tags</th><th style="width:80px">Updated</th>
-          <th style="width:72px"></th>
+          <th style="width:36px;cursor:pointer;user-select:none" onclick="sortNotes('id')" title="Sort by ID"># <span id="nsrt-id">↓</span></th>
+          <th style="width:200px;cursor:pointer;user-select:none" onclick="sortNotes('title')" title="Sort by Title">Title <span id="nsrt-title"></span></th>
+          <th style="cursor:pointer;user-select:none" onclick="sortNotes('body')" title="Sort by Preview">Note Preview <span id="nsrt-body"></span></th>
+          <th style="width:140px;text-align:left;cursor:pointer;user-select:none" onclick="sortNotes('tags')" title="Sort by Tags">Tags <span id="nsrt-tags"></span></th>
+          <th style="width:90px;cursor:pointer;user-select:none" onclick="sortNotes('updated_at')" title="Sort by Updated">Updated <span id="nsrt-updated_at"></span></th>
+          <th style="width:64px"></th>
         </tr></thead><tbody id="notesTbody"></tbody></table>
       </div>
     </div>
@@ -655,6 +658,24 @@ td input[type=date].ci{color-scheme:dark;}
   </div>
 </main>
 
+<!-- NOTE VIEW MODAL (read-only) -->
+<div class="overlay" id="noteViewModal">
+  <div class="modal" style="width:580px;max-width:95vw">
+    <div class="mhdr">
+      <h2 id="noteViewTitle" style="font-size:16px"></h2>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-gold btn-sm" id="noteViewEditBtn" onclick="">✎ Edit</button>
+        <button class="close-m" onclick="closeModal('noteViewModal')">×</button>
+      </div>
+    </div>
+    <div class="mbody">
+      <div id="noteViewTags" style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      <div id="noteViewBody" style="font-size:13px;line-height:1.7;color:var(--offwhite);max-height:60vh;overflow-y:auto;padding:4px 2px"></div>
+      <div id="noteViewMeta" style="margin-top:14px;font-size:11px;color:var(--mid);font-family:'DM Mono',monospace"></div>
+    </div>
+  </div>
+</div>
+
 <!-- NOTE POPOVER -->
 <div class="note-pop" id="notePop">
   <div class="note-pop-hdr"><span>📝 Notes</span><button class="note-close" onclick="closeNotePop()">×</button></div>
@@ -806,7 +827,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.8', logoUrl='';
+let appVersion='v2.1.10', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -817,6 +838,7 @@ let sortCol=null, sortDir=1, sortByOrder=false;
 let dragSrcId=null, kbDragId=null, expanded=new Set();
 let undoStack=[], redoStack=[], MAX_UNDO=30;
 let noteTaskId=null, notesView='table', blockerPanelCollapsed=false;
+let notesSortCol='id', notesSortDir=-1; // default: ID desc
 let ownerDropdownOpen=false, sDragIdx=null, sDragType=null;
 let _tagSuggestIdx=-1;
 let sbRealtime=null;
@@ -1035,9 +1057,10 @@ async function saveNote(){
   const existing=id?notes.find(x=>x.id===id):null;
   // isNew = true means this note does NOT yet exist in Supabase
   const isNew = !id;
+  const tempId = isNew ? (Date.now()) : id;
   const obj={
-    id:id||null, title, body, color, pinned, isSticky, tags,
-    _isNew: isNew, // internal flag — never send to DB
+    id:tempId, title, body, color, pinned, isSticky, tags,
+    _isNew: isNew,
     updated_at:new Date().toISOString(),
     pos_x:existing?.pos_x??null,
     pos_y:existing?.pos_y??null
@@ -1069,26 +1092,57 @@ async function toggleNotePin(id){
 
 function renderNotesTable(filtered){
   const tbody=document.getElementById('notesTbody');if(!tbody)return;
-  if(!filtered.length){
-    tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:22px;color:var(--mid);font-size:13px">No notes yet. Click + Add Note to begin.</td></tr>`;
+  // Apply sort
+  const sorted=[...filtered].sort((a,b)=>{
+    let av,bv;
+    if(notesSortCol==='id'){av=a.id||0;bv=b.id||0;return notesSortDir*(av-bv);}
+    if(notesSortCol==='updated_at'){av=a.updated_at||'';bv=b.updated_at||'';return notesSortDir*(av<bv?-1:av>bv?1:0);}
+    if(notesSortCol==='tags'){av=(a.tags||[]).join(',');bv=(b.tags||[]).join(',');}
+    else if(notesSortCol==='body'){av=(a.body||'').replace(/<[^>]+>/g,' ').trim();bv=(b.body||'').replace(/<[^>]+>/g,' ').trim();}
+    else{av=String(a[notesSortCol]||'');bv=String(b[notesSortCol]||'');}
+    return notesSortDir*av.localeCompare(bv);
+  });
+  // Update sort indicators
+  ['id','title','body','tags','updated_at'].forEach(col=>{
+    const el=document.getElementById('nsrt-'+col);
+    if(!el)return;
+    el.textContent=notesSortCol===col?(notesSortDir===1?'↑':'↓'):'';
+    el.style.color='var(--acc)';
+  });
+  if(!sorted.length){
+    tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:22px;color:var(--mid);font-size:13px">No notes yet. Click + Add Note to begin.</td></tr>`;
     return;
   }
-  tbody.innerHTML=filtered.map((n,i)=>{
-    const snippet=(n.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,80);
+  tbody.innerHTML=sorted.map((n,i)=>{
+    const snippet=(n.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,120);
     const tags=(n.tags||[]).map(t=>`<span class="tag-chip" style="font-size:10px">${esc(t)}</span>`).join('');
     const d=n.updated_at?new Date(n.updated_at).toLocaleDateString():'';
     return`<tr>
-      <td style="color:var(--mid);font-family:'DM Mono',monospace;font-size:10px;width:30px">${i+1}</td>
-      <td style="font-weight:500">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</td>
-      <td style="color:var(--mid);font-size:12px">${esc(snippet)}</td>
-      <td>${tags}</td>
+      <td style="color:var(--mid);font-family:'DM Mono',monospace;font-size:10px;width:36px">${n.id||i+1}</td>
+      <td style="font-weight:500;width:200px;cursor:pointer;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" onclick="openNoteViewModal(${n.id})" title="Click to view">${n.pinned?'📌 ':''}${esc(n.title||'Untitled')}</td>
+      <td style="color:var(--mid);font-size:12px;cursor:pointer;max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" onclick="openNoteViewModal(${n.id})" title="Click to view">${esc(snippet)}${snippet.length>=120?'…':''}</td>
+      <td style="text-align:left">${tags}</td>
       <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);white-space:nowrap">${d}</td>
-      <td style="white-space:nowrap;min-width:72px;padding-right:8px">
+      <td style="white-space:nowrap;padding-right:8px">
         <button class="edit-row-btn" onclick="openNoteModal(${n.id})" title="Edit note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
         <button class="del-btn" onclick="deleteNote(${n.id})" title="Delete note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>
       </td>
     </tr>`;
   }).join('');
+}
+function sortNotes(col){
+  if(notesSortCol===col){notesSortDir*=-1;}else{notesSortCol=col;notesSortDir=1;}
+  renderNotesView();
+}
+function openNoteViewModal(id){
+  const n=notes.find(x=>x.id===id||x.id===Number(id));if(!n)return;
+  document.getElementById('noteViewTitle').textContent=(n.pinned?'📌 ':'')+( n.title||'Untitled');
+  document.getElementById('noteViewBody').innerHTML=n.body||'<em style="opacity:.4">No content.</em>';
+  document.getElementById('noteViewTags').innerHTML=(n.tags||[]).map(t=>`<span class="tag-chip">${esc(t)}</span>`).join('');
+  const d=n.updated_at?new Date(n.updated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+  document.getElementById('noteViewMeta').textContent=d?`Updated ${d}`:'';
+  document.getElementById('noteViewEditBtn').onclick=()=>{closeModal('noteViewModal');openNoteModal(id);};
+  document.getElementById('noteViewModal').classList.add('open');
 }
 async function saveNoteToSb(n){
   setSyncDot('saving');
@@ -2077,7 +2131,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.8</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.10</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2085,7 +2139,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.8';
+  appVersion='v2.1.10';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   applyBrandingToHeader();
@@ -2107,7 +2161,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.8</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.10</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
