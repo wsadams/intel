@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.17                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.20                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -135,7 +135,18 @@ tbody tr{border-bottom:1px solid rgba(255,255,255,.03);transition:background .1s
 tbody tr:hover{background:rgba(255,255,255,.025);}
 tbody tr:last-child{border-bottom:none;}
 td{padding:7px 7px;vertical-align:middle;font-size:var(--table-size);color:rgba(255,255,255,.83);overflow:hidden;text-overflow:ellipsis;}
-/* Note view modal body — preserve rich text list formatting */
+/* Resources dropdown */
+.resources-wrap{position:static;}
+.resources-drop{display:none;position:fixed;min-width:220px;background:#152134;border:1px solid var(--acc-b);border-radius:9px;box-shadow:0 8px 32px rgba(0,0,0,.55);z-index:400;padding:6px;overflow:hidden;}
+.resources-drop.open{display:block;}
+.res-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--offwhite);text-decoration:none;cursor:pointer;transition:background .12s;white-space:nowrap;}
+.res-item:hover{background:var(--acc3);color:var(--acc);}
+.res-item svg{flex-shrink:0;opacity:.5;}
+.res-empty{padding:10px 12px;font-size:12px;color:var(--mid);text-align:center;}
+/* Countdown */
+#refreshCountdown{font-size:10px;color:rgba(255,255,255,.2);font-family:'DM Mono',monospace;letter-spacing:.5px;transition:color .3s;cursor:default;}
+#refreshCountdown.soon{color:rgba(255,200,100,.5);}
+#refreshCountdown.imminent{color:rgba(255,120,120,.7);}
 #noteViewBody ul,#noteViewBody ol{padding-left:22px;margin:6px 0;}
 #noteViewBody ul{list-style:disc;}
 #noteViewBody ol{list-style:decimal;}
@@ -377,11 +388,12 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.17</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.20</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
   <div class="hdr-right">
+    <span id="refreshCountdown" title="Auto-refresh countdown"></span>
     <span id="userChip" onclick="changeUser()" title="Click to change user" style="font-size:11px;color:var(--mid);border:1px solid rgba(255,255,255,.1);border-radius:99px;padding:3px 10px;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='var(--mid)'">👤 —</span>
     <button onclick="toggleFullscreen()" id="fsBtn" title="Enter fullscreen" style="background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:#7A8AA0;cursor:pointer;font-size:14px;transition:all .14s;" onmouseover="this.style.borderColor='var(--acc2)';this.style.color='var(--acc2)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='#7A8AA0'">⛶</button>
     <div style="display:flex;align-items:center;gap:5px">
@@ -404,6 +416,12 @@ td input[type=date].ci{color-scheme:dark;}
 </header>
 
 <div class="tab-bar" id="tabBar"></div>
+<!-- Resources dropdown lives here so it overlays content correctly -->
+<div class="resources-wrap" id="resourcesWrap" style="position:relative;display:inline-block">
+  <div class="resources-drop" id="resourcesDrop">
+    <div id="resourcesDropList"></div>
+  </div>
+</div>
 
 <main>
   <!-- PROJECT PLANNER PAGE -->
@@ -580,6 +598,38 @@ td input[type=date].ci{color-scheme:dark;}
         <div class="s-add"><input type="text" id="newNoteTagInput" placeholder="#new-note-tag"><button class="btn btn-gold btn-sm" onclick="addNoteTagFromSettings()">Add</button></div>
       </div>
 
+      <!-- Resources -->
+      <div class="settings-section">
+        <h3>Resources</h3>
+        <p style="font-size:12px;color:var(--mid);margin-bottom:10px">Links that appear in the Resources menu in the header. Add any related documents, proposals, or tools.</p>
+        <div id="resourceLinksList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+          <div class="field" style="margin:0"><label>Label</label><input type="text" id="newResLabel" placeholder="e.g. Business Plan"></div>
+          <div class="field" style="margin:0"><label>URL</label><input type="text" id="newResUrl" placeholder="https://…"></div>
+          <button class="btn btn-gold btn-sm" style="align-self:end" onclick="addResourceLink()">Add</button>
+        </div>
+      </div>
+
+      <!-- Auto-Refresh -->
+      <div class="settings-section">
+        <h3>Auto-Refresh</h3>
+        <p style="font-size:12px;color:var(--mid);margin-bottom:10px">Automatically reload data from the database on a schedule. A subtle countdown appears in the header.</p>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="field" style="margin:0;min-width:180px">
+            <label>Refresh interval</label>
+            <select id="setAutoRefresh" onchange="saveAutoRefresh()" style="padding:8px 11px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:7px;color:var(--offwhite);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%">
+              <option value="0">Disabled</option>
+              <option value="30">Every 30 minutes</option>
+              <option value="60">Every 1 hour</option>
+              <option value="120" selected>Every 2 hours</option>
+              <option value="240">Every 4 hours</option>
+              <option value="480">Every 8 hours</option>
+            </select>
+          </div>
+          <div style="font-size:12px;color:var(--mid);padding-top:18px">Next refresh: <span id="nextRefreshLabel" style="color:var(--acc2)">—</span></div>
+        </div>
+      </div>
+
       <!-- Data Management -->
       <div class="settings-section">
         <h3>Data Management</h3>
@@ -745,6 +795,10 @@ td input[type=date].ci{color-scheme:dark;}
         <div class="field"><label>🔗 Depends On (Task ID)</label><input type="number" id="fDependsOn" placeholder="Enter task #ID" min="1"></div>
       </div>
       <div class="field"><label>Notes</label><textarea id="fNotes" rows="2" placeholder="Status notes, context…"></textarea></div>
+      <div id="taskMetaBar" style="display:none;padding:8px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:7px;font-size:11px;color:var(--mid);font-family:'DM Mono',monospace;display:flex;flex-wrap:wrap;gap:12px">
+        <span id="taskMetaCreated"></span>
+        <span id="taskMetaUpdated"></span>
+      </div>
     </div>
     <div class="mfoot">
       <button class="btn btn-outline" onclick="closeModal('taskModal')">Cancel</button>
@@ -846,7 +900,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.17', logoUrl='';
+let appVersion='v2.1.20', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -857,7 +911,10 @@ let sortCol=null, sortDir=1, sortByOrder=false;
 let dragSrcId=null, kbDragId=null, expanded=new Set();
 let undoStack=[], redoStack=[], MAX_UNDO=30;
 let noteTaskId=null, notesView='table', blockerPanelCollapsed=true;
-let notesSortCol='id', notesSortDir=-1; // default: ID desc
+let notesSortCol='id', notesSortDir=-1;
+let resourceLinks=[]; // {label, url}
+let autoRefreshMins=120; // default 2 hours, 0 = disabled
+let _autoRefreshTimer=null, _countdownTimer=null; // default: ID desc
 let ownerDropdownOpen=false, sDragIdx=null, sDragType=null;
 let _tagSuggestIdx=-1;
 let sbRealtime=null;
@@ -931,6 +988,8 @@ async function loadFromSupabase(){
         if(s.font_settings) applyFontSettings(s.font_settings);
         if(s.phase_colors) phaseColors=s.phase_colors;
         if(s.palette) applyPalette(s.palette, false);
+        if(s.resource_links) resourceLinks=s.resource_links;
+        if(s.auto_refresh_mins!=null) autoRefreshMins=s.auto_refresh_mins;
         applyBrandingToHeader();
       }
     }
@@ -941,6 +1000,10 @@ async function loadFromSupabase(){
     if(lsPhaseColors){ try{phaseColors=JSON.parse(lsPhaseColors);}catch(e){} }
     const lsLogoPad=localStorage.getItem('shw_logo_padding');
     if(lsLogoPad) applyLogoPadding(lsLogoPad);
+    const lsResLinks=localStorage.getItem('shw_resource_links');
+    if(lsResLinks){ try{resourceLinks=JSON.parse(lsResLinks);}catch(e){} }
+    const lsAR=localStorage.getItem('shw_auto_refresh_mins');
+    if(lsAR!=null) autoRefreshMins=parseInt(lsAR)||0;
     // Load tasks
     const tr = await sbFetch('tasks?order=order_val.asc');
     if(tr.ok){
@@ -958,7 +1021,9 @@ async function loadFromSupabase(){
           time: r.time_est||'', notes: r.notes||'',
           blocker: r.blocker||'', dependsOn: r.depends_on||null,
           order: r.order_val||0,
-          tags: Array.isArray(r.tags)?r.tags:[]
+          tags: Array.isArray(r.tags)?r.tags:[],
+          createdAt: r.created_at||null, updatedAt: r.updated_at||null,
+          createdBy: r.created_by||'', updatedBy: r.updated_by||''
         }));
         nextId = Math.max(...tasks.map(t=>t.id), 0)+1;
         // rebuild allTags from tasks too
@@ -990,7 +1055,9 @@ async function saveTaskToSb(t){
     start_date: t.startDate||'', due_date: t.dueDate||'',
     time_est: t.time||'', notes: t.notes||'',
     blocker: t.blocker||'', depends_on: t.dependsOn||null,
-    order_val: t.order||0, tags: t.tags||[]
+    order_val: t.order||0, tags: t.tags||[],
+    updated_at: new Date().toISOString(), updated_by: currentUser||'',
+    ...(t._sbId ? {} : {created_at: new Date().toISOString(), created_by: currentUser||''})
   };
   try {
     let r;
@@ -1022,11 +1089,15 @@ async function saveSettingsToSb(){
   // phase_colors, palette, and logo padding stored locally — not all Supabase schemas have these columns
   localStorage.setItem('shw_palette', document.documentElement.dataset.palette||'gold');
   localStorage.setItem('shw_phase_colors', JSON.stringify(phaseColors));
+  localStorage.setItem('shw_resource_links', JSON.stringify(resourceLinks));
+  localStorage.setItem('shw_auto_refresh_mins', String(autoRefreshMins));
   const padVal=document.getElementById('fsLogoPadding')?.value||getComputedStyle(document.documentElement).getPropertyValue('--logo-pad-y').trim().replace('px','')||'0';
   localStorage.setItem('shw_logo_padding', padVal);
   const row = {
     id:1, app_title:appTitle, app_subtitle:appSubtitle,
     logo_url:logoUrl, phases, people, tags:allTags,
+    resource_links: resourceLinks,
+    auto_refresh_mins: autoRefreshMins,
     font_settings:{
       bodySize: getComputedStyle(document.documentElement).getPropertyValue('--body-size').trim(),
       titleSize: getComputedStyle(document.documentElement).getPropertyValue('--title-size').trim(),
@@ -1318,6 +1389,7 @@ function buildTabs(){
     bar.innerHTML+=`<button class="tab ${currentPage==='planner'&&currentTab===p?'active':''}" data-phase="${safeP}" onclick="switchPlannerTabByEl(this)">${p} <span class="cnt" id="cnt-${cid(p)}">${cnt}</span></button>`;
   });
   bar.innerHTML+=`<div style="flex:1"></div>`;
+  bar.innerHTML+=`<button class="tab" id="resourcesTabBtn" onclick="toggleResourcesDrop(this)">🔗 Resources ▾</button>`;
   bar.innerHTML+=`<button class="tab ${currentPage==='notes'?'active':''}" onclick="goPage('notes',this)">📝 Notes <span class="cnt" id="notesCnt">${notes.length}</span></button>`;
   bar.innerHTML+=`<button class="tab ${currentPage==='settings'?'active':''}" onclick="goPage('settings',this)">⚙ Settings</button>`;
 }
@@ -1461,7 +1533,7 @@ function renderTable(){
       <td class="editable" ondblclick="ie(this,'phase','select',${t.id})"><span class="phase-pill ${pillCls}">${esc(t.phase)}</span></td>
       <td class="editable" ondblclick="ie(this,'priority','select',${t.id})"><span class="pri-dot ${priM.cls}">${priM.lbl}</span></td>
       <td class="editable" ondblclick="ie(this,'tags','tags',${t.id})">${renderTagChips(t.tags)}</td>
-      <td class="editable" ondblclick="ie(this,'task','text',${t.id})" style="font-weight:${(t.status==='Not Started'||t.status==='On Hold')?'100':'500'};${(t.status==='Not Started'||t.status==='On Hold')?'color:rgb(209 209 209 / 83%)':''}">${t.blocker?`<span class="blocker-flag" title="${esc(t.blocker)}">🚫 </span>`:''}<span style="display:${depWarn(t)?'inline':'none'}" title="Depends on incomplete task">⚠ </span>${esc(t.task)}</td>
+      <td class="editable" ondblclick="ie(this,'task','text',${t.id})" style="font-weight:${(t.status==='Not Started'||t.status==='On Hold')?'100':'500'};${(t.status==='Not Started'||t.status==='On Hold')?'color:rgb(209 209 209 / 83%)':''}">${t.blocker?`<span class="blocker-flag" title="${esc(t.blocker)}">🚫 </span>`:''}<span style="display:${depWarn(t)?'inline':'none'};color:#E05252;font-weight:700" title="Depends on incomplete task">⚠ </span>${esc(t.task)}</td>
       <td class="editable" ondblclick="ie(this,'owner','owner',${t.id})">${renderOwnerTags(t.owner)}</td>
       <td class="editable" ondblclick="ie(this,'status','select',${t.id})"><span class="status-pill ${stCls}">${t.status}</span></td>
       <td class="editable date-val" ondblclick="ie(this,'startDate','date',${t.id})">${fmtDate(t.startDate)}</td>
@@ -1652,6 +1724,9 @@ document.addEventListener('click',e=>{
   if(dd&&wrap&&ownerDropdownOpen&&!dd.contains(e.target)&&!wrap.contains(e.target)){dd.style.display='none';ownerDropdownOpen=false;}
   const np=document.getElementById('notePop');
   if(np&&np.classList.contains('open')&&!np.contains(e.target)&&!e.target.classList.contains('note-btn'))closeNotePop();
+  const resDrop=document.getElementById('resourcesDrop');
+  const resBtn=document.getElementById('resourcesTabBtn');
+  if(resDrop&&resDrop.classList.contains('open')&&!resDrop.contains(e.target)&&(!resBtn||!resBtn.contains(e.target)))resDrop.classList.remove('open');
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -1735,6 +1810,18 @@ function openAddModal(id=null,parentId=null){
     document.getElementById('fTags').value=(t.tags||[]).join(' ');
     parseTimeValue(t.time);
     buildOwnerDropdown(Array.isArray(t.owner)?t.owner:(t.owner?[t.owner]:[]));
+    // Meta bar
+    const metaBar=document.getElementById('taskMetaBar');
+    const metaCreated=document.getElementById('taskMetaCreated');
+    const metaUpdated=document.getElementById('taskMetaUpdated');
+    if(metaBar){
+      metaBar.style.display='flex';
+      const fmtDT=dt=>{if(!dt)return null;const d=new Date(dt);return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});};
+      const created=fmtDT(t.createdAt);
+      const updated=fmtDT(t.updatedAt);
+      if(metaCreated) metaCreated.textContent=created?`✦ Added ${created}${t.createdBy?' by '+t.createdBy:''}`:t._sbId?'✦ Added: unknown':'';
+      if(metaUpdated) metaUpdated.textContent=updated&&updated!==created?`✎ Updated ${updated}${t.updatedBy?' by '+t.updatedBy:''}`:updated?`✎ Last saved ${updated}`:'';
+    }
   } else {
     const par=parentId?tasks.find(x=>x.id===parentId):null;
     fp.value=par?par.phase:(currentTab!=='__all__'?currentTab:phases[0]);
@@ -1742,6 +1829,8 @@ function openAddModal(id=null,parentId=null){
     document.getElementById('fTimeNum').value='';document.getElementById('fTimeUnit').value='days';
     document.getElementById('fStatus').value='Not Started';document.getElementById('fPriority').value='';
     buildOwnerDropdown([people[1]||'']);
+    const metaBar=document.getElementById('taskMetaBar');
+    if(metaBar) metaBar.style.display='none';
   }
   document.getElementById('taskModal').classList.add('open');
 }
@@ -1770,7 +1859,11 @@ async function saveTask(){
     blocker:document.getElementById('fBlocker').value.trim(),
     dependsOn:parseInt(document.getElementById('fDependsOn').value)||null,
     order:existing?existing.order:tasks.length*10+nextId,
-    tags:rawTags
+    tags:rawTags,
+    createdAt: existing?.createdAt||(id?null:new Date().toISOString()),
+    createdBy: existing?.createdBy||(id?'':currentUser||''),
+    updatedAt: new Date().toISOString(),
+    updatedBy: currentUser||''
   };
   if(id)tasks[tasks.findIndex(x=>x.id===id)]=obj;
   else{tasks.push(obj);if(parentId)expanded.add(parentId);}
@@ -2129,6 +2222,13 @@ function loadSettingsPage(){
   // Sync supabase toggle UI
   const sbTog = document.getElementById('sbToggle');
   if(sbTog){ sbTog.checked = supabaseEnabled; toggleSupabase(supabaseEnabled); }
+  // Resources
+  renderResourceLinksSettings();
+  // Auto-refresh
+  const arSel=document.getElementById('setAutoRefresh');
+  if(arSel) arSel.value=String(autoRefreshMins);
+  const lbl=document.getElementById('nextRefreshLabel');
+  if(lbl) lbl.textContent=autoRefreshMins?`${autoRefreshMins} min`:'Disabled';
   // Load audit log
   loadAuditLog();
 }
@@ -2255,7 +2355,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.17</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.20</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2263,7 +2363,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.17';
+  appVersion='v2.1.20';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   // Save logo padding into localStorage so it persists
@@ -2289,7 +2389,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.17</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.20</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2512,6 +2612,112 @@ function rebuildAll(){buildTabs();buildStats();buildFilters();renderTable();if(c
 // ══════════════════════════════════════════════════════════════
 //  TOAST
 // ══════════════════════════════════════════════════════════════
+function rebuildAll(){buildTabs();buildStats();buildFilters();renderTable();if(currentView==='kanban')renderKanban();if(currentPage==='settings')loadSettingsPage();}
+
+// ══════════════════════════════════════════════════════════════
+//  RESOURCES DROPDOWN
+// ══════════════════════════════════════════════════════════════
+function toggleResourcesDrop(btn){
+  const drop=document.getElementById('resourcesDrop');
+  const isOpen=drop.classList.contains('open');
+  if(!isOpen){
+    buildResourcesDrop();
+    // Position below the button
+    const b=(btn||document.getElementById('resourcesTabBtn'));
+    if(b){
+      const rect=b.getBoundingClientRect();
+      drop.style.top=(rect.bottom+4)+'px';
+      drop.style.left=rect.left+'px';
+    }
+  }
+  drop.classList.toggle('open');
+}
+function buildResourcesDrop(){
+  const list=document.getElementById('resourcesDropList');
+  if(!list)return;
+  if(!resourceLinks.length){
+    list.innerHTML=`<div class="res-empty">No resources yet.<br>Add them in Settings.</div>`;
+    return;
+  }
+  list.innerHTML=resourceLinks.map((r,i)=>`
+    <a class="res-item" href="${esc(r.url)}" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      ${esc(r.label||r.url)}
+    </a>`).join('');
+}
+function renderResourceLinksSettings(){
+  const el=document.getElementById('resourceLinksList');if(!el)return;
+  if(!resourceLinks.length){el.innerHTML=`<p style="font-size:12px;color:var(--mid)">No resources added yet.</p>`;return;}
+  el.innerHTML=resourceLinks.map((r,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px">
+      <span style="font-size:13px;flex:0 0 auto">🔗</span>
+      <span style="font-weight:500;font-size:12.5px;min-width:120px">${esc(r.label||'—')}</span>
+      <a href="${esc(r.url)}" target="_blank" style="font-size:11px;color:var(--acc2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.url)}</a>
+      <button class="del-btn" onclick="removeResourceLink(${i})" title="Remove"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+    </div>`).join('');
+}
+function addResourceLink(){
+  const label=document.getElementById('newResLabel').value.trim();
+  const url=document.getElementById('newResUrl').value.trim();
+  if(!url){toast('URL is required');return;}
+  const fullUrl=url.startsWith('http')?url:'https://'+url;
+  resourceLinks.push({label:label||fullUrl, url:fullUrl});
+  document.getElementById('newResLabel').value='';
+  document.getElementById('newResUrl').value='';
+  renderResourceLinksSettings();
+  saveSettingsToSb();
+  toast('✓ Resource added');
+}
+function removeResourceLink(idx){
+  resourceLinks.splice(idx,1);
+  renderResourceLinksSettings();
+  saveSettingsToSb();
+  toast('✓ Resource removed');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AUTO-REFRESH + COUNTDOWN
+// ══════════════════════════════════════════════════════════════
+function startAutoRefresh(){
+  clearInterval(_autoRefreshTimer);
+  clearInterval(_countdownTimer);
+  const el=document.getElementById('refreshCountdown');
+  const lbl=document.getElementById('nextRefreshLabel');
+  if(!autoRefreshMins||autoRefreshMins<=0){
+    if(el)el.textContent='';
+    if(lbl)lbl.textContent='Disabled';
+    return;
+  }
+  let secsLeft=autoRefreshMins*60;
+  const fmt=s=>{const m=Math.floor(s/60),sec=s%60;return m>0?`${m}m ${sec.toString().padStart(2,'0')}s`:`${sec}s`;};
+  const updateCountdown=()=>{
+    if(!el)return;
+    el.textContent=fmt(secsLeft);
+    el.className='';
+    if(secsLeft<=300) el.classList.add('soon');
+    if(secsLeft<=60) el.classList.add('imminent');
+    if(lbl) lbl.textContent=fmt(secsLeft);
+  };
+  updateCountdown();
+  _countdownTimer=setInterval(()=>{
+    secsLeft--;
+    if(secsLeft<=0){secsLeft=autoRefreshMins*60;}
+    updateCountdown();
+  },1000);
+  _autoRefreshTimer=setInterval(async()=>{
+    toast('🔄 Auto-refreshing…');
+    await loadFromSupabase();
+    rebuildAll();
+    secsLeft=autoRefreshMins*60;
+  }, autoRefreshMins*60*1000);
+}
+function saveAutoRefresh(){
+  const sel=document.getElementById('setAutoRefresh');
+  autoRefreshMins=parseInt(sel?.value)||0;
+  saveSettingsToSb();
+  startAutoRefresh();
+  toast(autoRefreshMins?`✓ Auto-refresh set to ${autoRefreshMins} min`:'✓ Auto-refresh disabled');
+}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);}
 document.querySelectorAll('.overlay').forEach(o=>{
   if(o.id==='noteModal')return; // note modal only closes on Save/Cancel
@@ -2864,6 +3070,7 @@ async function init(){
   if(!currentUser) openWhoModal();
   // Subscribe to realtime polling
   subscribeRealtime();
+  startAutoRefresh();
 }
 
 init();
