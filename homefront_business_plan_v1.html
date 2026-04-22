@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeFront Watch — Business Plan v1.1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a0f1e;--deep:#0d1526;--panel:#111827;--border:#1e2d45;
+  --blue:#1a56db;--blue-light:#3b82f6;--accent:#f59e0b;--accent2:#10b981;
+  --red:#ef4444;--purple:#8b5cf6;--text:#e2e8f0;--muted:#94a3b8;--faint:#1e293b;
+  --font-title:'Bebas Neue';--font-body:'DM Sans';--font-table:'DM Mono';
+  --body-size:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--navy);color:var(--text);font-family:var(--font-body,'DM Sans'),sans-serif;font-size:var(--body-size);line-height:1.6;}
+
+/* STICKY FRAME: header + tab nav together */
+.sticky-frame{position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);}
+/* HEADER */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:rgba(10,15,30,.98);border-bottom:1px solid var(--border);}
+.app-logo{font-family:var(--font-title,'Bebas Neue'),sans-serif;font-size:22px;color:#fff;letter-spacing:2px;}
+.app-logo span{color:var(--accent);}
+.app-version{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-left:10px;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.settings-btn{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;}
+.settings-btn:hover{color:var(--accent);border-color:var(--accent);}
+
+/* SETTINGS PANEL */
+.settings-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;}
+.settings-overlay.open{display:block;}
+.settings-panel{position:fixed;top:0;right:0;width:320px;height:100vh;background:var(--deep);border-left:1px solid var(--border);z-index:501;padding:28px 24px;overflow-y:auto;transform:translateX(100%);transition:transform .3s;}
+.settings-panel.open{transform:translateX(0);}
+.settings-close{float:right;background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px 6px;}
+.settings-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;margin-bottom:20px;}
+.stg-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block;margin-top:18px;}
+.stg-swatches{display:flex;gap:8px;flex-wrap:wrap;}
+.stg-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .2s;}
+.stg-swatch.active,.stg-swatch:hover{border-color:#fff;}
+.stg-range{width:100%;accent-color:var(--accent);}
+.stg-select{width:100%;background:var(--faint);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;margin-top:4px;cursor:pointer;}
+.stg-select option{background:var(--deep);}
+.stg-info{font-size:11px;color:var(--muted);margin-top:6px;}
+
+/* COVER */
+.cover{background:linear-gradient(135deg,#060b17 0%,#0a1628 50%,#0f1f3d 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 40px 70px;position:relative;overflow:hidden;}
+.cover::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(26,86,219,.1) 0%,transparent 70%);top:-150px;right:-150px;}
+.cover::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.07) 0%,transparent 70%);bottom:-100px;left:-100px;}
+.badge{display:inline-block;background:rgba(26,86,219,.2);border:1px solid rgba(26,86,219,.4);color:#60a5fa;padding:6px 18px;border-radius:100px;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:30px;font-family:'DM Mono',monospace;}
+.cover-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,82px);line-height:.95;letter-spacing:2px;color:#fff;margin-bottom:8px;}
+.cover-logo span{color:var(--accent);}
+.cover-sub{font-size:13px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:36px;font-family:'DM Mono',monospace;}
+.cover-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,4vw,48px);color:var(--accent);letter-spacing:3px;margin-bottom:14px;}
+.cover-desc{max-width:560px;color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:44px;}
+.divider-line{width:60px;height:3px;background:var(--accent);margin:0 auto 44px;}
+.cover-meta{display:flex;gap:36px;flex-wrap:wrap;justify-content:center;margin-bottom:44px;}
+.csn{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--accent);display:block;}
+.csl{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+
+/* TAB NAV */
+.tab-nav{display:flex;gap:0;flex-wrap:nowrap;overflow-x:auto;background:rgba(20,28,50,.98);border-bottom:1px solid var(--border);scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 16px;border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* TAB CONTENT */
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* LAYOUT */
+.section{max-width:980px;margin:0 auto;padding:60px 28px;}
+.sl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--blue-light);text-transform:uppercase;margin-bottom:8px;}
+.st{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);letter-spacing:2px;color:#fff;margin-bottom:8px;}
+.st span{color:var(--accent);}
+.si{color:var(--muted);max-width:640px;margin-bottom:36px;font-size:15px;}
+.section-divider{border:none;border-top:1px solid var(--border);margin:0;}
+
+/* CARDS */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;}
+.ca{border-top:3px solid var(--accent);}
+.cb{border-top:3px solid var(--blue-light);}
+.cg{border-top:3px solid var(--accent2);}
+.cr{border-top:3px solid var(--red);}
+.cp{border-top:3px solid var(--purple);}
+.clb{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-family:'DM Mono',monospace;}
+.cv{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--accent);line-height:1;margin-bottom:5px;}
+.cv.bl{color:var(--blue-light);}.cv.gr{color:var(--accent2);}.cv.rd{color:var(--red);}
+.cd{font-size:13px;color:var(--muted);}
+.ct{font-weight:600;font-size:15px;margin-bottom:7px;color:#fff;}
+
+/* ALERTS */
+.alert{border-radius:8px;padding:18px 22px;margin-bottom:24px;}
+.alert-t{font-weight:600;margin-bottom:5px;font-size:13px;}
+.alert-p{font-size:14px;}
+.alert-gold{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-left:4px solid var(--accent);}
+.alert-gold .alert-t{color:var(--accent);}
+.alert-gold .alert-p{color:var(--muted);}
+.alert-green{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-left:4px solid var(--accent2);}
+.alert-green .alert-t{color:var(--accent2);}
+.alert-green .alert-p{color:var(--muted);}
+.alert-blue{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);border-left:4px solid var(--blue-light);}
+.alert-blue .alert-t{color:var(--blue-light);}
+.alert-blue .alert-p{color:var(--muted);}
+.alert-red{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-left:4px solid var(--red);}
+.alert-red .alert-t{color:var(--red);}
+.alert-red .alert-p{color:var(--muted);}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+@media(max-width:720px){.g2,.g3,.g4{grid-template-columns:1fr;}.tab-btn{padding:10px 12px;font-size:8px;}}
+
+/* TAGS */
+.tag{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-family:'DM Mono',monospace;}
+.tg{background:rgba(16,185,129,.15);color:#34d399;}
+.ty{background:rgba(245,158,11,.15);color:#fbbf24;}
+.tr{background:rgba(239,68,68,.15);color:#f87171;}
+.tb{background:rgba(59,130,246,.15);color:#93c5fd;}
+.tp{background:rgba(139,92,246,.15);color:#c4b5fd;}
+
+/* BLIST */
+.blist{list-style:none;}
+.blist li{font-size:14px;color:var(--muted);padding:3px 0;display:flex;gap:7px;}
+.blist li::before{content:'→';color:var(--accent);flex-shrink:0;}
+
+/* GAP TAGS */
+.gap-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#34d399;padding:5px 12px;border-radius:7px;font-size:12px;margin:3px;}
+.gap-tag::before{content:'✓';font-weight:700;}
+
+/* BARS */
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.bar-lbl{width:140px;font-size:12px;color:var(--muted);text-align:right;flex-shrink:0;}
+.bar-track{flex:1;height:28px;background:var(--faint);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:500;font-family:'DM Mono',monospace;}
+.bf-a{background:linear-gradient(90deg,#d97706,#f59e0b);}
+.bf-b{background:linear-gradient(90deg,#1d4ed8,#3b82f6);}
+.bf-g{background:linear-gradient(90deg,#059669,#10b981);}
+.bf-p{background:linear-gradient(90deg,#7c3aed,#8b5cf6);}
+.bf-r{background:linear-gradient(90deg,#dc2626,#ef4444);}
+
+/* TABLES */
+.comp-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:14px;}
+.comp-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);background:var(--faint);}
+.comp-table td{padding:11px 12px;border-bottom:1px solid rgba(30,45,69,.5);vertical-align:top;}
+.comp-table tr.hl td{background:rgba(245,158,11,.06);}
+.comp-table tr.hl td:first-child{border-left:3px solid var(--accent);}
+.proj-table{width:100%;border-collapse:collapse;font-size:12px;}
+.proj-table th{background:var(--faint);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;text-align:right;border-bottom:1px solid var(--border);}
+.proj-table th:first-child{text-align:left;}
+.proj-table td{padding:10px 12px;text-align:right;border-bottom:1px solid rgba(30,45,69,.4);font-family:'DM Mono',monospace;}
+.proj-table td:first-child{text-align:left;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;}
+.proj-table tr.ptarget td{background:rgba(16,185,129,.08);color:var(--accent2);font-weight:600;}
+.proj-table tr.ptarget td:first-child{border-left:3px solid var(--accent2);}
+.proj-table tr.pstretch td{background:rgba(245,158,11,.08);color:var(--accent);}
+.proj-table tr.pstretch td:first-child{border-left:3px solid var(--accent);}
+
+/* CALCULATOR */
+.calc-wrapper{background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(16,185,129,.05));border:2px solid var(--accent);border-radius:16px;padding:30px;margin-bottom:24px;}
+.calc-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
+.calc-sub{color:var(--muted);font-size:12px;margin-bottom:22px;}
+.input-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;}
+.input-block label{display:block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.input-block input[type=number]{width:100%;background:var(--faint);border:1px solid var(--border);color:#fff;padding:9px 13px;border-radius:7px;font-size:16px;font-family:'DM Mono',monospace;}
+.input-block input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;margin-top:4px;}
+.input-val{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);margin-top:4px;}
+.calc-section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-light);margin:16px 0 10px;border-bottom:1px solid var(--border);padding-bottom:6px;}
+.sub-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.sub-tier{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+.sub-tier.active{border-color:var(--accent);}
+.sub-tier-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.sub-tier-price{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent2);}
+.sub-tier-note{font-size:11px;color:var(--muted);margin-top:3px;}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px;}
+.res-card{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:14px;text-align:center;}
+.res-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.res-val{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+.rv-gold{color:var(--accent);}.rv-green{color:var(--accent2);}.rv-blue{color:var(--blue-light);}.rv-red{color:var(--red);}.rv-purple{color:var(--purple);}
+.insight-box{background:linear-gradient(135deg,rgba(26,86,219,.1),rgba(16,185,129,.08));border:1px solid rgba(59,130,246,.2);border-radius:12px;padding:24px;margin-bottom:22px;text-align:center;}
+.big-num{font-family:'Bebas Neue',sans-serif;font-size:60px;color:var(--accent);line-height:1;display:block;}
+
+/* STARTUP COSTS DYNAMIC TABLE */
+.cost-table{width:100%;border-collapse:collapse;margin-bottom:12px;}
+.cost-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);background:var(--faint);}
+.cost-table td{padding:9px 12px;border-bottom:1px solid rgba(30,45,69,.4);font-size:13px;vertical-align:middle;}
+.cost-table td input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;width:100%;outline:none;}
+.cost-table td input.cost-amt{font-family:'DM Mono',monospace;color:var(--accent);width:100px;text-align:right;}
+.cost-table td input:focus{background:rgba(255,255,255,.05);border-radius:4px;padding:2px 4px;}
+.del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;opacity:.5;transition:opacity .2s;padding:2px 6px;}
+.del-btn:hover{opacity:1;}
+.add-cost-btn{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--accent2);padding:7px 16px;border-radius:7px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-right:8px;transition:all .2s;}
+.add-cost-btn:hover{background:rgba(16,185,129,.2);}
+.export-btn{background:rgba(26,86,219,.1);border:1px solid rgba(26,86,219,.3);color:var(--blue-light);padding:7px 16px;border-radius:7px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-right:8px;transition:all .2s;}
+.export-btn:hover{background:rgba(26,86,219,.2);}
+.import-btn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--accent);padding:7px 16px;border-radius:7px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.import-btn:hover{background:rgba(245,158,11,.2);}
+.cost-total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 12px;border-top:2px solid var(--border);font-weight:600;font-size:15px;margin-top:4px;}
+.cost-total-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent2);}
+
+/* TEAM */
+.team-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.team-role{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-light);margin-bottom:5px;}
+.team-name{font-weight:600;font-size:16px;margin-bottom:3px;}
+.team-title{font-size:13px;color:var(--accent);margin-bottom:8px;font-style:italic;}
+
+/* PHASE BLOCKS */
+.phase-block{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.phase-header{display:flex;align-items:center;gap:18px;padding:18px 22px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.phase-num{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;color:var(--accent);opacity:.35;width:46px;flex-shrink:0;}
+.phase-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:#fff;}
+.phase-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1px;}
+.phase-body{padding:18px 22px;}
+.step{display:flex;gap:12px;margin-bottom:12px;}
+.step-l{width:24px;height:24px;border-radius:50%;background:var(--faint);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);flex-shrink:0;margin-top:2px;}
+.step-t{font-size:14px;color:var(--text);line-height:1.5;}
+.step-t strong{color:#fff;}
+
+/* WHO WE ARE */
+.founder-hero{background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(26,86,219,.06));border:1px solid rgba(245,158,11,.2);border-radius:16px;padding:36px;margin-bottom:28px;text-align:center;}
+.founder-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.founder-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,4vw,42px);color:#fff;line-height:1.1;letter-spacing:2px;margin-bottom:14px;}
+.founder-headline span{color:var(--accent);}
+.founder-quote{font-size:15px;color:var(--muted);font-style:italic;max-width:620px;margin:0 auto 20px;line-height:1.8;}
+.founder-quote strong{color:var(--text);font-style:normal;}
+.member-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:28px;}
+.member-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;gap:14px;align-items:flex-start;}
+.member-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;flex-shrink:0;color:#fff;}
+.member-info .role{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.member-info .name{font-weight:600;font-size:15px;color:#fff;margin-bottom:2px;}
+.member-info .title{font-size:12px;color:var(--accent);font-style:italic;margin-bottom:6px;}
+.member-info .desc{font-size:13px;color:var(--muted);line-height:1.5;}
+
+/* MARKET */
+.stat-highlight{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;margin-bottom:18px;}
+.stat-highlight .big{font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--accent);line-height:1;}
+.stat-highlight p{color:var(--muted);font-size:13px;margin-top:6px;}
+
+/* PRODUCT */
+.product-card{background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(16,185,129,.04));border:2px solid rgba(245,158,11,.25);border-radius:14px;padding:28px;margin-bottom:20px;}
+.product-card h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:8px;}
+.product-card h3 span{color:var(--accent);}
+
+/* MARKETING STRATEGY CARDS */
+.strategy-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px;}
+.strategy-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--accent);opacity:.2;float:left;line-height:1;margin-right:12px;margin-top:-4px;}
+.strategy-title{font-weight:600;font-size:15px;color:#fff;margin-bottom:6px;}
+.strategy-body{font-size:14px;color:var(--muted);line-height:1.6;}
+.strategy-tag{display:inline-block;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--accent2);padding:3px 10px;border-radius:100px;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin:6px 4px 0 0;}
+
+/* FOOTER */
+.footer{text-align:center;padding:44px 28px;background:var(--deep);border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:2px;margin-bottom:7px;}
+input[type=number]::-webkit-inner-spin-button{opacity:.5;}
+</style>
+</head>
+<body>
+
+<!-- STICKY FRAME: header + tab nav only -->
+<div class="sticky-frame">
+<header class="app-header">
+  <div style="display:flex;align-items:center;gap:0;">
+    <div class="app-logo">Homefront <span>Watch</span></div>
+    <span class="app-version">Business Plan v1.1.0</span>
+  </div>
+  <div class="header-right">
+    <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;">by Obsidian Federal LLC</span>
+    <button class="settings-btn" onclick="openSettings()" title="Settings">⚙</button>
+  </div>
+</header>
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" id="whoWeAreTab" onclick="showTab('whoWeAre',this)">Who We Are</button>
+  <button class="tab-btn" onclick="showTab('opportunity',this)">The Opportunity</button>
+  <button class="tab-btn" onclick="showTab('product',this)">Our Product</button>
+  <button class="tab-btn" onclick="showTab('customers',this)">Who We Serve</button>
+  <button class="tab-btn" onclick="showTab('marketing',this)">Marketing Plan</button>
+  <button class="tab-btn" onclick="showTab('goToMarket',this)">Go-To-Market</button>
+  <button class="tab-btn" onclick="showTab('swot',this)">SWOT</button>
+  <button class="tab-btn" onclick="showTab('operations',this)">Operations</button>
+  <button class="tab-btn" onclick="showTab('calculator',this)">Revenue Model</button>
+  <button class="tab-btn" onclick="showTab('startupCosts',this)">Startup Costs</button>
+  <button class="tab-btn" onclick="showTab('roadmap',this)">Roadmap</button>
+</nav>
+</div><!-- end .sticky-frame -->
+
+<!-- SETTINGS PANEL (fixed, outside sticky frame) -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+<div class="settings-panel" id="settingsPanel">
+  <button class="settings-close" onclick="closeSettings()">✕</button>
+  <div class="settings-title">Settings</div>
+
+  <span class="stg-label">Accent Color</span>
+  <div class="stg-swatches">
+    <div class="stg-swatch active" style="background:#f59e0b" data-accent="#f59e0b" data-accent2="#10b981" onclick="setTheme(this)"></div>
+    <div class="stg-swatch" style="background:#3b82f6" data-accent="#3b82f6" data-accent2="#10b981" onclick="setTheme(this)"></div>
+    <div class="stg-swatch" style="background:#10b981" data-accent="#10b981" data-accent2="#f59e0b" onclick="setTheme(this)"></div>
+    <div class="stg-swatch" style="background:#8b5cf6" data-accent="#8b5cf6" data-accent2="#10b981" onclick="setTheme(this)"></div>
+    <div class="stg-swatch" style="background:#ef4444" data-accent="#ef4444" data-accent2="#f59e0b" onclick="setTheme(this)"></div>
+    <div class="stg-swatch" style="background:#ec4899" data-accent="#ec4899" data-accent2="#10b981" onclick="setTheme(this)"></div>
+  </div>
+
+  <span class="stg-label">Background Darkness</span>
+  <input type="range" class="stg-range" id="bgDark" min="0" max="30" value="0" oninput="setBgDark(this.value)">
+  <div class="stg-info">Adjust panel darkness</div>
+
+  <span class="stg-label">Content Text Size</span>
+  <input type="range" class="stg-range" id="fontSize" min="13" max="22" value="16" oninput="setFontSize(this.value)">
+  <div class="stg-info" id="fontSizeLabel">16px — body paragraphs, bullets, table text</div>
+
+  <span class="stg-label">About This Document</span>
+  <div class="stg-info" style="margin-top:4px;">HomeFront Watch Business Plan v1.1.0<br>Obsidian Federal LLC · DBA HomeFront Watch<br>Confidential — Internal Use Only</div>
+</div>
+
+<!-- COVER (scrollable, below sticky frame) -->
+<div class="cover" id="cover">
+  <div class="badge">Confidential · Business Plan v1.1.0 · April 2026</div>
+  <div class="cover-logo">Homefront <span>Watch</span><br><span style="font-size:.5em;color:var(--muted);">by Obsidian Federal LLC</span></div>
+  <div class="cover-sub">D2C Home Security · PA · NJ · NY</div>
+  <div class="divider-line"></div>
+  <div class="cover-title">From Detective's Badge<br>to Your Front Door</div>
+  <div class="cover-desc">A family-built home security company, founded by a retired NJ Port Authority Special Investigations Unit detective. 25 years of protecting communities. Now protecting homes — yours included.</div>
+  <div class="cover-meta">
+    <div><span class="csn">$56B</span><span class="csl">Market Size</span></div>
+    <div><span class="csn">$35</span><span class="csl">Monthly Sub</span></div>
+    <div><span class="csn">$24</span><span class="csl">Net/Sub/Mo</span></div>
+    <div><span class="csn">48%</span><span class="csl">HH Adoption</span></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: WHO WE ARE
+     ========================================================= -->
+<div class="tab-pane active" id="tab-whoWeAre">
+  <div class="section">
+    <div class="sl">The Family</div>
+    <div class="st">Who <span>We Are</span></div>
+    <div class="si">Not a startup. Not a corporation. A family that has spent decades protecting people — and decided it was time to take that mission directly to homeowners.</div>
+
+    <div class="founder-hero">
+      <div class="founder-badge">Founded on Service · Built on Trust</div>
+      <div class="founder-headline">A Family That <span>Knows</span><br>What's At Stake</div>
+      <div class="founder-quote">
+        Most security companies were built in boardrooms. <strong>Ours was built in the field.</strong>
+        Our father spent 25 years as a Special Investigations Unit detective — not responding to crimes after the fact, but studying the people who planned them.
+        When he retired, he didn't stop thinking about how to keep families safe. He just started doing it differently.
+        HomeFront Watch is the result: a no-contract, AI-powered, family-monitored home security system built around the knowledge that most security companies simply don't have.
+      </div>
+      <div style="display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:18px;">
+        <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);">25+</div><div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Years Law Enforcement</div></div>
+        <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);">SIU</div><div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Special Investigations</div></div>
+        <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);">Zero</div><div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Contracts Required</div></div>
+        <div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);">100%</div><div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Family-Run</div></div>
+      </div>
+    </div>
+
+    <div class="member-grid">
+      <div class="member-card" style="border-top:3px solid var(--accent);">
+        <div class="member-avatar" style="background:rgba(245,158,11,.2);">D</div>
+        <div class="member-info">
+          <div class="role">CEO & Founder</div>
+          <div class="name">Detective Dad</div>
+          <div class="title">NJ Port Authority SIU · 25+ Years</div>
+          <div class="desc">The face and the story. A career spent in Special Investigations — studying how criminals plan, not just react. That knowledge is now baked into every product recommendation and every customer conversation.</div>
+        </div>
+      </div>
+      <div class="member-card" style="border-top:3px solid var(--blue-light);">
+        <div class="member-avatar" style="background:rgba(59,130,246,.2);">S</div>
+        <div class="member-info">
+          <div class="role">COO & Co-Founder</div>
+          <div class="name">Shaun Adams</div>
+          <div class="title">Strategy, AI & Operations</div>
+          <div class="desc">The systems architect. Shaun runs operations, leads AI integration, and builds the automation infrastructure that lets a lean family team punch above its weight. The brains behind the engine.</div>
+        </div>
+      </div>
+      <div class="member-card" style="border-top:3px solid var(--purple);">
+        <div class="member-avatar" style="background:rgba(139,92,246,.2);">T</div>
+        <div class="member-info">
+          <div class="role">Community Director</div>
+          <div class="name">Tia</div>
+          <div class="title">Brand, Community & Outreach</div>
+          <div class="desc">The connector. Tia builds community — through content, through events, through the stories that bring the HomeFront Watch brand to life in neighborhoods and online.</div>
+        </div>
+      </div>
+      <div class="member-card" style="border-top:3px solid #c4b5fd;">
+        <div class="member-avatar" style="background:rgba(196,181,253,.15);">J</div>
+        <div class="member-info">
+          <div class="role">Social Media Manager</div>
+          <div class="name">Jada</div>
+          <div class="title">Content, Social & Digital Strategy</div>
+          <div class="desc">The voice online. Jada manages every platform, every post, and every comment. When the content works, she scales it. When something goes viral, she knows exactly what to do next.</div>
+        </div>
+      </div>
+      <div class="member-card" style="border-top:3px solid var(--accent2);">
+        <div class="member-avatar" style="background:rgba(16,185,129,.2);">J</div>
+        <div class="member-info">
+          <div class="role">Videographer</div>
+          <div class="name">Jeremiah</div>
+          <div class="title">Production & Content Creation</div>
+          <div class="desc">The eye behind the camera. Jeremiah produces the content that makes the brand real — from founder story films to unboxing videos to TikTok clips that show people what home security actually looks like.</div>
+        </div>
+      </div>
+      <div class="member-card" style="border-top:3px solid var(--muted);">
+        <div class="member-avatar" style="background:rgba(148,163,184,.15);">M</div>
+        <div class="member-info">
+          <div class="role">Project Manager</div>
+          <div class="name">Mom</div>
+          <div class="title">Accountability & Coordination</div>
+          <div class="desc">The glue. Mom keeps everyone on track — deadlines, deliverables, team check-ins. In a family business, having someone hold the calendar and hold people accountable is what separates intention from execution.</div>
+        </div>
+      </div>
+      <div class="member-card" style="border-top:3px solid #34d399;">
+        <div class="member-avatar" style="background:rgba(52,211,153,.15);">K</div>
+        <div class="member-info">
+          <div class="role">Partner</div>
+          <div class="name">Kevin</div>
+          <div class="title">Business Partner & Connections</div>
+          <div class="desc">Kevin brings a federal industry network and real estate connections — crucial for commercial growth and warm business development in a market that runs on relationships.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-gold">
+      <div class="alert-t">🏢 Our Legal Entity</div>
+      <div class="alert-p"><strong style="color:#fff;">Obsidian Federal LLC</strong> — registered in Delaware. Operating as <strong style="color:#fff;">HomeFront Watch</strong>. Dad and Kevin are founding partners. The DBA filing is in progress. Licensed to provide professional monitoring in PA, NJ, and NY.</div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-t">💡 The "Detective Dad" Brand Differentiator — This Cannot Be Bought</div>
+      <div class="alert-p">Our CEO is a retired NJ Port Authority <strong style="color:#fff;">Special Investigations Unit</strong> detective — major crimes, not traffic stops. He spent his career understanding how criminals think and plan. That means when he says a system works, homeowners believe him in a way no ad campaign can manufacture. No Ring. No SimpliSafe. No ADT. Nobody can replicate this story.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: THE OPPORTUNITY
+     ========================================================= -->
+<div class="tab-pane" id="tab-opportunity">
+  <div class="section">
+    <div class="sl">Market Intelligence</div>
+    <div class="st">A Market Ready<br>for a <span>Real Story</span></div>
+    <div class="si">Every major alarm brand is faceless, contract-heavy, and terrible at customer service. The data confirms it — and the ESA/Parks Associates 2026 research confirms the timing couldn't be better.</div>
+
+    <div class="g4">
+      <div class="stat-highlight"><div class="big">48%</div><p>of US households now own a home security solution — up 10 points since 2022. That's 12 million new households in 3 years.</p></div>
+      <div class="stat-highlight"><div class="big" style="color:var(--blue-light);">42%</div><p>of households that switched providers said they wanted a system with <strong style="color:#fff;">more features</strong> — not lower price.</p></div>
+      <div class="stat-highlight"><div class="big" style="color:var(--accent2);">70%</div><p>of security system owners find <strong style="color:#fff;">video verification</strong> highly appealing. AI-powered detection is what the market wants now.</p></div>
+      <div class="stat-highlight"><div class="big" style="color:var(--red);">1.3★</div><p>Ring's Trustpilot score. Customer service is the #1 complaint across all major brands. Our human touch is the differentiator.</p></div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-t">🔑 The Differentiator — Cannot Be Overstated</div>
+      <div class="alert-p">A retired <strong>Major Crimes / SIU detective</strong> — who spent decades investigating the people who plan crimes, not just respond to them. The pitch: <em style="color:#fff;">"I didn't just show up after the break-in. I investigated the people who planned them. I know how they think — and I built this system around that knowledge."</em> No Ring. No SimpliSafe. No ADT. Nobody can manufacture this story.</div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px;">
+      <span class="gap-tag">SIU detective credibility no ad budget can buy</span>
+      <span class="gap-tag">Optional monitoring — no forced lock-in</span>
+      <span class="gap-tag">Family-run story is TikTok's #1 performing content type</span>
+      <span class="gap-tag">AI-powered detection built into base kit</span>
+      <span class="gap-tag">Built-in cellular — works even if WiFi is cut</span>
+      <span class="gap-tag">Human customer service — a real family answers</span>
+      <span class="gap-tag">No contracts = no pressure, lower sales resistance</span>
+      <span class="gap-tag">63% of buyers want AI-driven analysis — we have it</span>
+    </div>
+
+    <div class="sl" style="margin-top:40px;">Competition</div>
+    <div class="st" style="margin-bottom:8px;">Know the <span>Competition</span></div>
+    <div class="si">HomeFront Watch competes with HOME ALARM SYSTEMS — not camera brands.</div>
+
+    <div style="overflow-x:auto;margin-bottom:24px;">
+    <table class="comp-table">
+      <thead><tr><th>Brand</th><th>Base Kit</th><th>Monitoring/Mo</th><th>Contract?</th><th>Cellular?</th><th>Key Weakness</th><th>Our Advantage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SimpliSafe</strong></td><td>$250–$730</td><td>$22.99–$79.99</td><td>No</td><td>Paid plans only</td><td>Up to $80/mo. No smart home integration. Customer service = #1 complaint.</td><td>$35 annual prepay beats their entire range on value.</td></tr>
+        <tr><td><strong>Ring Alarm</strong></td><td>$199–$500</td><td>$20/mo (pro add-on)</td><td>No</td><td>Pro plan only</td><td>Amazon owns your data. Can't arm remotely without subscription. 1.3★ service.</td><td>No data harvesting. Works without Amazon. Cellular built into base kit.</td></tr>
+        <tr><td><strong>Cove</strong></td><td>$300–$700+</td><td>$19.99–$29.99</td><td>No</td><td>All plans</td><td>Monitoring REQUIRED — no self-monitoring option. Limited equipment.</td><td>Monitoring is optional. Family stands behind every piece of gear.</td></tr>
+        <tr><td><strong>Abode</strong></td><td>$279+</td><td>$6–$20/mo</td><td>No</td><td>Add-on only</td><td>Very tech-heavy setup — confusing for average homeowner. Days for email support.</td><td>Simpler. Real human setup support. Detective explains everything plainly.</td></tr>
+        <tr><td><strong>ADT Self-Setup</strong></td><td>$349+</td><td>$28.99–$39.99</td><td>36–60 months</td><td>Yes</td><td>Long contracts. 75% early termination fee.</td><td>No contracts. No pressure. No corporate runaround.</td></tr>
+        <tr class="hl"><td><strong>HomeFront Watch 🎯</strong></td><td id="oppKitPrice">$350</td><td>$25–$45/mo (3 tiers, no contract)</td><td>No contract</td><td>Yes — built into base kit</td><td>—</td><td>SIU detective story. Family brand. AI-powered. Human service. Flexible pricing.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="alert alert-gold">
+      <div class="alert-t">📊 2026 Market Insight: AI Is Now a Baseline Expectation</div>
+      <div class="alert-p">The ESA/Parks Associates 2026 State of Home Security report confirms that 63% of buyers want AI-driven analysis of sensor and video data, and 70% find video verification highly appealing. The Prima by NAPCO system delivers AI human detection, self-healing Wi-Fi, and reduced false alarms — features our competitors charge extra for or don't offer at all. This is no longer a premium differentiator. It is the expectation. And we already have it.</div>
+    </div>
+
+    <div style="margin-top:16px;margin-bottom:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Monthly Monitoring Price Comparison</div>
+    <div style="margin-bottom:24px;">
+      <div class="bar-row"><div class="bar-lbl">Abode (basic)</div><div class="bar-track"><div class="bar-fill bf-b" style="width:8%">$6</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">ISC 2-yr prepay</div><div class="bar-track"><div class="bar-fill bf-g" style="width:27%" id="bar2yr">$25</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">Cove Basic</div><div class="bar-track"><div class="bar-fill bf-b" style="width:22%">$19.99</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">Ring Alarm</div><div class="bar-track"><div class="bar-fill bf-b" style="width:22%">$20</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">HFW Annual prepay</div><div class="bar-track"><div class="bar-fill bf-a" style="width:40%" id="barAnnual">$35</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">SimpliSafe Std</div><div class="bar-track"><div class="bar-fill bf-p" style="width:26%">$22.99</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">HFW Month-to-Mo</div><div class="bar-track"><div class="bar-fill bf-a" style="width:52%" id="barMTM">$45</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">ADT Self-Setup</div><div class="bar-track"><div class="bar-fill bf-r" style="width:46%">$39.99 + contracts</div></div></div>
+      <div class="bar-row"><div class="bar-lbl">SimpliSafe Pro+</div><div class="bar-track"><div class="bar-fill bf-r" style="width:100%">$79.99/month</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: OUR PRODUCT
+     ========================================================= -->
+<div class="tab-pane" id="tab-product">
+  <div class="section">
+    <div class="sl">The System</div>
+    <div class="st">Our <span>Product</span></div>
+    <div class="si">Prima by NAPCO — a professional-grade, AI-powered wireless home alarm system designed for self-install. No tools. No technician. 20 minutes.</div>
+
+    <div class="product-card">
+      <h3>Prima by <span>NAPCO</span></h3>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Professional security hardware with AI built in — available at consumer pricing with no long-term commitment.</div>
+      <div class="g2">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Base Kit Includes</div>
+          <ul class="blist">
+            <li>iPad-style LCD control panel (touchscreen)</li>
+            <li>3 wireless door/window sensors</li>
+            <li>1 wireless motion sensor (pet/baby immune)</li>
+            <li>Built-in cellular communicator (works without WiFi)</li>
+            <li>App control (arm/disarm remotely)</li>
+            <li>Real-time alerts on your phone</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Available Add-Ons</div>
+          <ul class="blist">
+            <li>Prima HD Video Doorbell (AI human detection)</li>
+            <li>Prima Indoor/Outdoor IP56 Camera</li>
+            <li>Additional door/window sensors</li>
+            <li>Wireless smoke/CO detectors</li>
+            <li>Professional installation by Jeremiah (+$99–$199)</li>
+            <li>HomeFront Watch yard signs & decals</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-t">🤖 AI Built Into the System — This Is What 63% of Buyers Want</div>
+      <div class="alert-p">The Prima system incorporates AI in ways that directly address what 2026 buyers are looking for. <strong style="color:#fff;">AI Human Detection</strong> on both the doorbell and cameras distinguishes real human movement from pets, vehicles, and birds — dramatically reducing false alerts. <strong style="color:#fff;">Self-Healing Wi-Fi</strong> automatically detects and resolves connectivity issues behind the scenes. <strong style="color:#fff;">PIR + AI fusion</strong> means you only get notified when a person is actually at your door. These aren't future features. They're in the base system today.</div>
+    </div>
+
+    <div class="g3" style="margin-bottom:28px;">
+      <div class="card ca">
+        <div class="clb">Tier 1 — Month-to-Month</div>
+        <div class="cv" id="mtmCard">$45<span style="font-size:16px;">/mo</span></div>
+        <div class="cd">Maximum flexibility. No prepayment. Cancel anytime.</div>
+      </div>
+      <div class="card cg">
+        <div class="clb">Tier 2 — Annual Prepay ⭐ Best Value</div>
+        <div class="cv gr" id="annualCard">$35<span style="font-size:16px;">/mo</span></div>
+        <div class="cd">Pay one year upfront. Saves $120/year vs. month-to-month. <strong>This is the pitch.</strong></div>
+      </div>
+      <div class="card cb">
+        <div class="clb">Tier 3 — 2-Year Prepay</div>
+        <div class="cv bl" id="twoyrCard">$25<span style="font-size:16px;">/mo</span></div>
+        <div class="cd">Maximum savings. Best for committed long-term customers.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-gold">
+      <div class="alert-t">⚡ The "No Contracts" Pitch That Still Gets Their Money</div>
+      <div class="alert-p">"We don't do contracts. But we do reward commitment. Pay month-to-month for maximum flexibility at $45/mo. Prepay a year and drop to $35/mo — saving $120. Lock in two years and it's just $25/mo — saving $480 over two years. Your choice. No fine print. No cancellation fees." This is the sales script. Honest, value-driven, and completely on-brand.</div>
+    </div>
+
+    <div class="alert alert-blue" style="margin-top:24px;">
+      <div class="alert-t">🚗 Future Product Line: Car Cameras (Phase 3/4)</div>
+      <div class="alert-p">Dad has pre-purchased 10 units for testing. Car cameras will be added as a parallel SKU — <strong style="color:#fff;">not integrated with the Prima app</strong> (Prima is a closed ecosystem). The positioning: "Home security for your car." The Ring Car Cam was discontinued in Feb 2024 — leaving white space for a home-security brand to own this category. Timeline: Phase 3 evaluation, Phase 4 launch if viable. Note: post-de-minimis tariffs require US warehousing (3PL) for any China-sourced inventory.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: WHO WE SERVE
+     ========================================================= -->
+<div class="tab-pane" id="tab-customers">
+  <div class="section">
+    <div class="sl">Customer Profiles</div>
+    <div class="st">Who We're <span>Selling To</span></div>
+    <div class="si">90% of all marketing spend goes to Avatar 1 — new homeowners in PA, NJ, and NY where we are licensed. Everything else is future phases.</div>
+
+    <div class="card ca" style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="width:46px;height:46px;border-radius:50%;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🏠</div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Primary Avatar · 90% Focus · PA, NJ, NY</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);">The Smart Nest Builder — New Homeowners, Ages 25–38</div></div>
+        <span class="tag ty">All Ad Spend Here</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+        <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Who They Are</div><div style="font-size:12px;color:var(--text);">First-time homeowners, newlyweds, young families — just got the keys. 72% of millennial homeowners already use surveillance. 50% install security when they move in.</div></div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Where to Find Them</div><div style="font-size:12px;color:var(--text);">TikTok (#newhouse #firsthome #homesecurity), Instagram Reels, Nextdoor, Reddit (r/FirstTimeHomeBuyer). Geo-target PA, NJ, and NY zip codes with active new developments.</div></div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">What Moves Them</div><div style="font-size:12px;color:var(--text);">"Set up in 20 minutes." Works if WiFi is cut. No forced subscription. Easy app. "A real SIU detective recommends this system." Social proof. Pain-based messaging: "The 5 signs your home is an easy target."</div></div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="card cb" style="opacity:.75;">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Secondary — Phase 3+</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--blue-light);">Caring Guardian (Ages 40–60)</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">Adult children buying for aging parents. Emotional purchase. Gift bundles for holidays. Facebook-first. "Peace of mind for you, independence for them." Not the current focus.</div>
+      </div>
+      <div class="card" style="opacity:.5;">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Tertiary — Phase 4+</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);">Small Business / Property Manager (Ages 30–55)</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">High LTV, multi-unit buyers. Not a priority until primary avatar is scaling well. Kevin's network is the entry point here.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-gold" style="margin-top:8px;">
+      <div class="alert-t">⚠️ Important: Geography Constrained by Licensing</div>
+      <div class="alert-p">We can only <strong style="color:#fff;">legally provide monitoring in PA, NJ, and NY</strong> — the states where Dad is currently licensed. All paid ads, Nextdoor targeting, and geographic outreach must stay within these states until Dad obtains additional licenses. Dad is researching MD, DC, and VA licensing requirements as a priority action item.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: GO-TO-MARKET
+     ========================================================= -->
+<div class="tab-pane" id="tab-goToMarket">
+  <div class="section">
+    <div class="sl">Marketing Strategy</div>
+    <div class="st">Go-To-<span>Market</span></div>
+    <div class="si">Two engines. The visibility engine feeds the money engine. The money engine funds more visibility. Neither waits for the other to start.</div>
+
+    <div class="g2" style="margin-bottom:28px;">
+      <div class="card ca" style="text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px;">📱</div>
+        <div class="ct">Visibility Engine</div>
+        <div style="font-size:13px;color:var(--muted);">TikTok, Instagram, Facebook, Nextdoor, Substack. Content posts daily. Detective Dad is the face. Tia produces. Jada schedules. AI automation handles the DMs and comments.</div>
+      </div>
+      <div class="card cg" style="text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px;">💰</div>
+        <div class="ct">Money Engine</div>
+        <div style="font-size:13px;color:var(--muted);">AI agents do the first-touch outreach. Dad takes the warm calls and meetings. Shopify and TikTok Shop handle the transaction. The goal is the first 10 sales — then scale what works.</div>
+      </div>
+    </div>
+
+    <!-- STRATEGY CARDS FROM VIDEOS -->
+    <div class="sl" style="margin-bottom:16px;">Content Strategy — Proven Frameworks</div>
+
+    <div class="strategy-card">
+      <div class="strategy-num">01</div>
+      <div class="strategy-title">Move People Away From Pain (Not Toward Pleasure)</div>
+      <div class="strategy-body">Most marketers try to sell "pleasure" — "7 steps to a safer home." But research shows people are more motivated to avoid pain. Instead of "How to have a safe home," the hook is: <strong style="color:#fff;">"The 7 biggest mistakes homeowners make that lead to break-ins."</strong> Dad's SIU background makes this content irrefutable. He's not guessing — he investigated these crimes for 25 years.</div>
+      <div><span class="strategy-tag">TikTok</span><span class="strategy-tag">Instagram</span><span class="strategy-tag">Reels</span><span class="strategy-tag">Phase 1</span></div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-num">02</div>
+      <div class="strategy-title">The Home Safety Scorecard (Assessment → Conversion)</div>
+      <div class="strategy-body">A standard "Book a Call" button converts at 2–4%. An interactive assessment converts at <strong style="color:#fff;">20–40%.</strong> Instead of sending people to a Services page, we send them to a "Home Security Risk Assessment" quiz — 2 minutes, 8 questions about their locks, lighting, and current cameras. They get a letter grade (A–F) and a recommendation. Their grade = a conversation with Dad. The quiz does the qualifying, Dad closes the sale.</div>
+      <div><span class="strategy-tag">Typeform / Interact</span><span class="strategy-tag">Phase 2</span><span class="strategy-tag">Funnel</span></div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-num">03</div>
+      <div class="strategy-title">Owner-Led Instagram + ManyChat DM Automation</div>
+      <div class="strategy-body">Run a simple Instagram Follower Ad with Dad speaking directly to camera — no fancy production, just Dad in front of a recently secured home or at his desk. When someone follows, <strong style="color:#fff;">ManyChat automatically sends a DM:</strong> "Hey, saw you followed! Thinking about home security?" The automation qualifies the lead (homeowner or renter? new home?) and routes them to the quiz or Shopify. Estimated cost per lead: under $1. Shaun builds the flow. Dad films one 60-second video.</div>
+      <div><span class="strategy-tag">ManyChat</span><span class="strategy-tag">Instagram Ads</span><span class="strategy-tag">Phase 2</span><span class="strategy-tag">AI Agent</span></div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-num">04</div>
+      <div class="strategy-title">The "Detective Dad Reacts to Headlines" Series</div>
+      <div class="strategy-body">Every morning, AI generates a list of home security and crime-related articles. Tia (or Shaun off-camera) asks: <strong style="color:#fff;">"So Detective Dad, I saw this article — what do you think about that?"</strong> Dad responds from his desk in 60–90 seconds. Batch-film 5–7 in one sitting on one day. Post one daily. This builds authority, drives followers, and positions Dad as the go-to voice in home security — without requiring daily production effort.</div>
+      <div><span class="strategy-tag">TikTok</span><span class="strategy-tag">Instagram</span><span class="strategy-tag">Daily</span><span class="strategy-tag">Phase 1</span></div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-num">05</div>
+      <div class="strategy-title">The "Viral Hook" Format (Random Clip → Product Pitch)</div>
+      <div class="strategy-body">A proven TikTok format: open with a <strong style="color:#fff;">completely unrelated viral clip for 3–5 seconds</strong> to stop the scroll. Then cut to Dad: "Don't be like this guy — but here's what you can do to protect your home today." This format generates outsized views because the algorithm initially reads it as high-retention content from the first clip. Shaun sources the hook clips. Dad films the transition. Volume of posts matters more than production quality at this stage.</div>
+      <div><span class="strategy-tag">TikTok</span><span class="strategy-tag">Phase 1</span><span class="strategy-tag">High Volume</span></div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-num">06</div>
+      <div class="strategy-title">Shaun's AI Safety Workshops (Brand + Revenue)</div>
+      <div class="strategy-body">Shaun delivers community workshops at churches, senior centers, and HOAs about AI safety — what it is, how it works, how it's being used around them. Generates: (1) speaking fees ($200–$500/appearance), (2) brand awareness for HomeFront Watch, (3) <strong style="color:#fff;">direct sales at every event</strong> as Shaun naturally introduces the security product. Tia and Shaun research venues. Planning begins late Phase 1, execution begins Phase 2.</div>
+      <div><span class="strategy-tag">Speaking</span><span class="strategy-tag">Revenue</span><span class="strategy-tag">Brand Awareness</span><span class="strategy-tag">Phase 2</span></div>
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="sl">Platform Priority</div>
+      <div class="card" style="margin-top:14px;">
+        <div class="bar-row"><div class="bar-lbl">TikTok</div><div class="bar-track"><div class="bar-fill bf-a" style="width:100%">1st — Daily posts, Detective Dad format</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">Instagram</div><div class="bar-track"><div class="bar-fill bf-b" style="width:78%">2nd — Reels + Stories + Follower Ads</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">Facebook</div><div class="bar-track"><div class="bar-fill bf-p" style="width:58%">3rd — 40+ demo + Nextdoor crossover</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">Nextdoor</div><div class="bar-track"><div class="bar-fill bf-g" style="width:52%">Phase 2 — Neighborhood-level targeting</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">Substack</div><div class="bar-track"><div class="bar-fill bf-g" style="width:44%">Phase 1 — "The Detective Dad Security Brief"</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">LinkedIn</div><div class="bar-track"><div class="bar-fill bf-b" style="width:36%">Phase 2 — Kevin's network + B2B</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">Thumbtack</div><div class="bar-track"><div class="bar-fill bf-b" style="width:32%">Phase 2 — Inbound installation leads</div></div></div>
+        <div class="bar-row"><div class="bar-lbl">YouTube</div><div class="bar-track"><div class="bar-fill bf-g" style="width:26%">Phase 3 — Repurpose top TikToks + long-form</div></div></div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:24px;">
+      <div class="alert-t">🤖 AI Agent Outreach — The First-Touch Engine</div>
+      <div class="alert-p">Rather than Tia or Mom doing manual outreach (capacity constraints are real), Shaun will build AI agents to handle first-touch outreach on LinkedIn, Nextdoor, and social media inboxes. The agent qualifies leads, sends a warm intro, and routes interested prospects to the Home Safety Scorecard quiz. Dad takes the calls. This is the money engine: agent reaches hundreds of potential customers per week with zero additional human labor. Build begins Phase 1, goes live Phase 2.</div>
+    </div>
+
+    <div class="alert alert-gold" style="margin-top:16px;">
+      <div class="alert-t">📰 "The Detective Dad Security Brief" — Substack</div>
+      <div class="alert-p">A free weekly newsletter about home safety, crime trends, and what a retired SIU detective wishes every homeowner knew. Launch free in Phase 1. Cross-post to LinkedIn Articles (authority/trust), Facebook (full post), Instagram (quote graphics). Monetize Phase 2 with a $5–$10/month paid tier. Target: 200+ paid subscribers = $1,000–$2,000/month passive. Tia scripts and publishes. AI assists with article research and formatting.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: MARKETING PLAN
+     ========================================================= -->
+<div class="tab-pane" id="tab-marketing">
+  <div class="section">
+    <div class="sl">The Plan</div>
+    <div class="st">Marketing <span>Plan</span></div>
+    <div class="si">Two engines working together. The visibility engine (content + social) feeds the money engine (leads + sales). Each feeds the other. Here is exactly how.</div>
+
+    <!-- TWO ENGINES -->
+    <div class="g2" style="margin-bottom:32px;">
+      <div class="card ca" style="text-align:center;padding:28px;">
+        <div style="font-size:36px;margin-bottom:10px;">📱</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;">Visibility Engine</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">TikTok, Instagram, Facebook, Nextdoor, Substack. Daily posts. Dad is the face. AI surfaces the content topics every morning. Tia produces. Jada schedules. The goal is reach — getting our name, face, and story in front of homeowners every single day.</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1.5px;">FEEDS → AWARENESS → FOLLOWERS → LEADS</div>
+      </div>
+      <div class="card cg" style="text-align:center;padding:28px;">
+        <div style="font-size:36px;margin-bottom:10px;">💰</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent2);letter-spacing:2px;margin-bottom:8px;">Money Engine</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">AI agents do first-touch outreach. ManyChat qualifies every DM. The Home Safety Scorecard quiz converts browsers into leads. Dad closes warm calls. Shopify + TikTok Shop process the transaction. Every sale funds more visibility.</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2);letter-spacing:1.5px;">LEADS → CONSULT → CLOSE → REVENUE</div>
+      </div>
+    </div>
+
+    <div class="alert alert-gold">
+      <div class="alert-t">⚡ The Flywheel: How They Feed Each Other</div>
+      <div class="alert-p">Every post builds followers. Followers become leads. Leads become sales. Sales fund more ads and content. More content builds more followers. <strong style="color:#fff;">This is not optional — both engines must run simultaneously from Day 1.</strong> Waiting for organic to grow before selling is the mistake most small businesses make. We post AND outreach AND close from the same week.</div>
+    </div>
+
+    <!-- PLATFORM BREAKDOWN -->
+    <div class="sl" style="margin-top:40px;">Platform Strategy</div>
+    <div class="st" style="margin-bottom:20px;">Where We <span>Show Up</span></div>
+
+    <div style="display:grid;gap:14px;margin-bottom:28px;">
+
+      <div class="card" style="border-left:4px solid var(--accent);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:1px;">TikTok <span style="color:var(--accent);">— Primary Visibility Engine</span></div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Phase 1 · Daily · Organic + TikTok Shop</div></div>
+          <span class="tag ty">Post Daily</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">What we post:</strong> "Detective Dad Reacts to Headlines" (batch-film 5–7 at once, post 1/day). "Viral hook" format (random clip → product pitch). "What criminals see" POV clips. Short DIY install demos. Pain-based hooks ("5 signs your home is an easy target").</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">How it sells:</strong> TikTok Shop activated (0% commission first 90 days). Every video links to product. ManyChat auto-responds to comments with a DM: "DM us SECURE for a free Home Safety Scorecard."</div>
+        <div style="font-size:13px;color:var(--muted);"><strong style="color:#fff;">Who runs it:</strong> Tia produces content with Dad. Jada schedules and manages the TikTok Shop. Shaun maintains ManyChat automation.</div>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--blue-light);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:1px;">Instagram <span style="color:var(--blue-light);">— Follower Ads + DM Funnel</span></div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Phase 1 Organic · Phase 2 Paid Ads</div></div>
+          <span class="tag tb">3x/Week Reels</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">What we post:</strong> Reels (repurposed top TikToks). Quote graphics from the Substack newsletter. Behind-the-scenes Stories. Product feature highlights. Customer testimonials.</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">How it sells (Phase 2):</strong> Run a simple Follower Ad — Dad speaking to camera, inviting people to follow for security tips. When someone follows, ManyChat auto-DMs: "Hey, saw you followed! Thinking about home security for your place?" Estimated CPA: under $1. Geo-target: PA, NJ, NY zip codes only.</div>
+        <div style="font-size:13px;color:var(--muted);"><strong style="color:#fff;">Bio CTA:</strong> "Get your free Home Safety Grade → [link to quiz]"</div>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--purple);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:1px;">Facebook <span style="color:var(--purple);">— Community + 40+ Demo</span></div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Phase 1 · Cross-Post + Group</div></div>
+          <span class="tag tp">1-2x/Day</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">What we post:</strong> Full Substack newsletter cross-posts. Video clips. Community-oriented safety tips. Local neighborhood crime awareness content (never fear-mongering, always empowering).</div>
+        <div style="font-size:13px;color:var(--muted);"><strong style="color:#fff;">Key asset:</strong> Build a "HomeFront Watch Home Security Community" Facebook Group — Tia manages. Dad answers questions. This group becomes a free CRM for warm leads who are not yet ready to buy.</div>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--accent2);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:1px;">Nextdoor <span style="color:var(--accent2);">— Hyperlocal Lead Generation</span></div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Phase 2 · PA/NJ/NY Neighborhoods</div></div>
+          <span class="tag tg">High Intent</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">What we do:</strong> Dad posts as himself — "Hi, I'm a retired detective and I help homeowners protect their families. Here's one thing most people miss about home security…" Personal, not promotional. Nextdoor's algorithm strongly favors local business owners who act like neighbors.</div>
+        <div style="font-size:13px;color:var(--muted);"><strong style="color:#fff;">Why it works:</strong> People on Nextdoor are already asking "Does anyone know a good security company?" This is free, warm, high-intent traffic that no national brand can replicate at the neighborhood level.</div>
+      </div>
+
+      <div class="card" style="border-left:4px solid #94a3b8;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:1px;">Substack <span style="color:#94a3b8;">— "The Detective Dad Security Brief"</span></div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Phase 1 Free · Phase 2 Paid Tier</div></div>
+          <span class="tag" style="background:rgba(148,163,184,.15);color:#94a3b8;">Weekly</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:#fff;">What it is:</strong> A weekly free newsletter — home safety tips, crime trends, and what a retired SIU detective wishes every homeowner knew. AI helps Tia surface news topics each morning. Dad writes (or speaks, Tia transcribes). Published every Tuesday.</div>
+        <div style="font-size:13px;color:var(--muted);"><strong style="color:#fff;">Cross-posting plan:</strong> Full post on Substack → LinkedIn Article (same content, establishes Dad as a thought leader) → Facebook full post → Instagram quote graphic (one strong quote per issue) → TikTok teaser ("This week's security tip from the newsletter…"). One piece of content → 5 platform appearances.</div>
+      </div>
+
+    </div>
+
+    <!-- CONTENT CALENDAR -->
+    <div class="sl" style="margin-top:20px;">Weekly Cadence</div>
+    <div class="st" style="margin-bottom:16px;">Content <span>Calendar</span></div>
+    <div style="overflow-x:auto;margin-bottom:28px;">
+    <table class="comp-table">
+      <thead><tr><th>Day</th><th>TikTok</th><th>Instagram</th><th>Facebook</th><th>Nextdoor (Phase 2)</th><th>Who</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mon</strong></td><td>Detective Dad Reacts (headline #1)</td><td>Story: Behind the scenes</td><td>Cross-post reel</td><td>—</td><td>Tia + Jada</td></tr>
+        <tr><td><strong>Tue</strong></td><td>Viral hook format</td><td>Reel (repurposed TikTok)</td><td>Substack newsletter</td><td>Dad tip post</td><td>Jada + Tia</td></tr>
+        <tr><td><strong>Wed</strong></td><td>Detective Dad Reacts (headline #2)</td><td>Story: Product feature</td><td>Safety tip graphic</td><td>—</td><td>Tia + Jada</td></tr>
+        <tr><td><strong>Thu</strong></td><td>Pain-based hook ("5 signs…")</td><td>Reel (new content)</td><td>Cross-post + engage group</td><td>Dad Q&A post</td><td>Jada + Dad</td></tr>
+        <tr><td><strong>Fri</strong></td><td>Detective Dad Reacts (headline #3)</td><td>Story: Customer story / tip</td><td>Community post</td><td>—</td><td>Tia + Jada</td></tr>
+        <tr><td><strong>Sat</strong></td><td>DIY install or unboxing clip</td><td>—</td><td>Weekend engagement</td><td>—</td><td>Jeremiah + Jada</td></tr>
+        <tr><td><strong>Sun</strong></td><td>Lighter / personal / family content</td><td>Story recap</td><td>—</td><td>—</td><td>Jada</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- SALES FUNNEL -->
+    <div class="sl" style="margin-top:20px;">The Sales Funnel</div>
+    <div class="st" style="margin-bottom:16px;">How Awareness Becomes <span>Sales</span></div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;">
+        <div style="text-align:center;padding:20px 14px;border-right:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:6px;">📱</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">AWARENESS</div>
+          <div style="font-size:11px;color:var(--muted);">TikTok, IG, Facebook, Nextdoor, Substack posts</div>
+        </div>
+        <div style="text-align:center;padding:20px 14px;border-right:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:6px;">🤖</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">ENGAGE</div>
+          <div style="font-size:11px;color:var(--muted);">ManyChat DM: "DM SECURE for your free Safety Grade"</div>
+        </div>
+        <div style="text-align:center;padding:20px 14px;border-right:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:6px;">📋</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">QUALIFY</div>
+          <div style="font-size:11px;color:var(--muted);">Home Safety Scorecard quiz (A–F grade + recommendation)</div>
+        </div>
+        <div style="text-align:center;padding:20px 14px;border-right:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:6px;">📞</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">CONSULT</div>
+          <div style="font-size:11px;color:var(--muted);">Dad takes the warm call. AI call assistant books the slot.</div>
+        </div>
+        <div style="text-align:center;padding:20px 14px;">
+          <div style="font-size:24px;margin-bottom:6px;">🛒</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent2);letter-spacing:1px;margin-bottom:4px;">CLOSE</div>
+          <div style="font-size:11px;color:var(--muted);">Shopify / TikTok Shop. Kit + monitoring tier. Upsell add-ons.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-t">💡 How Sales Funds More Visibility</div>
+      <div class="alert-p">Phase 1: zero ad spend — pure organic + outreach. First 10 sales fund the first ad budget. <strong style="color:#fff;">Rule: allocate 20–30% of monthly kit margin back to ads and content production.</strong> As sales grow, the ad budget grows. As the ad budget grows, reach expands. As reach expands, sales grow. This flywheel is the plan. It starts small and compounds fast if we stay consistent.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: SWOT
+     ========================================================= -->
+<div class="tab-pane" id="tab-swot">
+  <div class="section">
+    <div class="sl">Honest Assessment</div>
+    <div class="st">SWOT <span>Analysis</span></div>
+    <div class="si">Where we're strong, where we're exposed, what's opening up for us, and what could slow us down. No sugarcoating.</div>
+
+    <div class="g2">
+      <!-- STRENGTHS -->
+      <div class="card" style="border-top:3px solid var(--accent2);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent2);letter-spacing:2px;margin-bottom:14px;">💪 Strengths</div>
+        <ul class="blist">
+          <li><strong style="color:#fff;">The Detective Dad story</strong> — 25 years SIU/major crimes. Zero competitors can manufacture this. It's authentic authority that no budget can buy.</li>
+          <li><strong style="color:#fff;">No contracts</strong> — removes the #1 sales objection in this category. Lower resistance = faster sales cycle.</li>
+          <li><strong style="color:#fff;">AI-powered product (Prima)</strong> — AI human detection, self-healing Wi-Fi, reduced false alarms. Matches exactly what 63% of 2026 buyers say they want.</li>
+          <li><strong style="color:#fff;">Family team = low overhead</strong> — no payroll until revenue starts. Lean from Day 1.</li>
+          <li><strong style="color:#fff;">Shaun's AI capability</strong> — ability to build automation (outreach agents, DM funnels, AI customer service) that a team 10× the size couldn't afford to hire.</li>
+          <li><strong style="color:#fff;">Existing infrastructure</strong> — Dad has 25 years of security industry relationships, professional licenses in 3 states, and NAPCO dealer access already in place.</li>
+          <li><strong style="color:#fff;">Kevin's network</strong> — federal industry contacts and real estate connections for B2B growth.</li>
+        </ul>
+      </div>
+      <!-- WEAKNESSES -->
+      <div class="card" style="border-top:3px solid var(--red);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--red);letter-spacing:2px;margin-bottom:14px;">⚠️ Weaknesses</div>
+        <ul class="blist">
+          <li><strong style="color:#fff;">Geographic constraint</strong> — monitoring can only be legally sold in PA, NJ, NY until Dad obtains additional state licenses. Limits market size in Phase 1.</li>
+          <li><strong style="color:#fff;">Team availability</strong> — Jeremiah is busy. Tia has other commitments. Jada's focus is uncertain. Execution is likely to fall primarily on Shaun initially.</li>
+          <li><strong style="color:#fff;">No pricing confirmed yet</strong> — exact kit cost and monitoring wholesale still pending Dad's NAPCO negotiation. Calculator numbers are estimates.</li>
+          <li><strong style="color:#fff;">No Shopify store live yet</strong> — can't sell anything until the infrastructure exists.</li>
+          <li><strong style="color:#fff;">Dad's work style</strong> — decision-making can be unpredictable. Requires patience and consistent framing of value to maintain momentum.</li>
+          <li><strong style="color:#fff;">Zero brand awareness today</strong> — starting from scratch on all platforms. Organic growth takes 60–90 days to show meaningful results.</li>
+        </ul>
+      </div>
+      <!-- OPPORTUNITIES -->
+      <div class="card" style="border-top:3px solid var(--blue-light);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--blue-light);letter-spacing:2px;margin-bottom:14px;">🚀 Opportunities</div>
+        <ul class="blist">
+          <li><strong style="color:#fff;">Ring Car Cam discontinued (Feb 2024)</strong> — white space for a home security brand in the dash cam category. Dad has 10 units ready to test.</li>
+          <li><strong style="color:#fff;">48% household security adoption</strong> growing to an estimated 55%+ by 2027 — the tailwind is real and accelerating.</li>
+          <li><strong style="color:#fff;">DIY owners are the most engaged</strong> — 40% add devices post-purchase vs. 30% of pro-installed. Our DIY customers are naturally our best upsell opportunity.</li>
+          <li><strong style="color:#fff;">No competitor doing family storytelling on TikTok</strong> — the category is all corporate. One viral detective dad video can generate thousands of leads overnight.</li>
+          <li><strong style="color:#fff;">Real estate agent referral network</strong> — Kevin has a contact. One productive agent = 2–5 warm leads per week with zero ad spend.</li>
+          <li><strong style="color:#fff;">AI agents can scale outreach infinitely</strong> — Shaun building these tools creates a competitive moat that family businesses almost never have.</li>
+          <li><strong style="color:#fff;">Shaun's AI Safety Workshops</strong> — direct revenue ($200–$500/appearance) + brand awareness + warm leads at every event.</li>
+          <li><strong style="color:#fff;">MD/DC/VA licensing</strong> — once obtained, opens 4M+ additional households in one of the fastest-growing metro areas in the country.</li>
+        </ul>
+      </div>
+      <!-- THREATS -->
+      <div class="card" style="border-top:3px solid var(--purple);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:14px;">⚡ Threats</div>
+        <ul class="blist">
+          <li><strong style="color:#fff;">SimpliSafe, Ring, ADT marketing budgets</strong> — they outspend any small operator by 1,000:1 on paid ads. Our only answer is authenticity and community that money can't replicate.</li>
+          <li><strong style="color:#fff;">TikTok algorithm unpredictability</strong> — organic reach can change overnight. Must build email list and Substack audience as owned assets in parallel.</li>
+          <li><strong style="color:#fff;">Monitoring cost increase risk</strong> — if NAPCO raises wholesale pricing, margins compress. Lock in pricing early and build in cushion.</li>
+          <li><strong style="color:#fff;">State licensing complexity</strong> — some states require county-by-county licensing. MD, DC, and VA all have different requirements. This could delay geographic expansion.</li>
+          <li><strong style="color:#fff;">Tariff / supply chain risk</strong> — relevant for the car camera line. Post-de-minimis rules require US warehousing for any China-sourced inventory.</li>
+          <li><strong style="color:#fff;">Team burnout</strong> — if execution falls primarily on Shaun, pace becomes unsustainable. AI agent infrastructure is the mitigation — build it before the volume requires it.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert alert-gold" style="margin-top:8px;">
+      <div class="alert-t">🎯 The Strategic Summary</div>
+      <div class="alert-p">We win by doing what the big brands cannot do: showing a real face, telling a real story, and building real relationships in real neighborhoods. Our strengths are human and authentic. Our threats are structural and addressable. The opportunity window is right now — before any other family-run security brand figures out TikTok at scale. The weaknesses are solvable with sequencing: get the store live, get the handles claimed, get the first content batch filmed. Everything else follows from those three things.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: OPERATIONS
+     ========================================================= -->
+<div class="tab-pane" id="tab-operations">
+  <div class="section">
+    <div class="sl">How We Run</div>
+    <div class="st">Operations &amp; <span>Team</span></div>
+    <div class="si">Every person has a defined lane. No overlap, no ambiguity. Lean team + AI tools = performance of a team 3× the size.</div>
+
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="team-card" style="border-top:3px solid var(--accent);">
+        <div class="team-role">CEO & Founder</div>
+        <div class="team-name">Detective Dad</div>
+        <div class="team-title">The Face & Story · No Salary Until Revenue</div>
+        <ul class="blist">
+          <li>Face of all content — TikTok, Instagram, speaking events</li>
+          <li>Takes warm calls and closes sales generated by AI outreach</li>
+          <li>Negotiates product pricing with NAPCO</li>
+          <li>Pursues additional state licenses (MD, DC, VA priority)</li>
+          <li>Founder commission structure activates at sustained revenue</li>
+        </ul>
+      </div>
+      <div class="team-card" style="border-top:3px solid var(--blue-light);">
+        <div class="team-role">COO & Co-Founder</div>
+        <div class="team-name">Shaun Adams</div>
+        <div class="team-title">Operations, AI & Systems</div>
+        <ul class="blist">
+          <li>Builds and maintains all AI agent workflows (outreach, DMs, funnel)</li>
+          <li>Manages Shopify, TikTok Shop, ManyChat, n8n integrations</li>
+          <li>Delivers AI Safety Workshops (revenue + brand building)</li>
+          <li>Oversees all business operations and execution of this plan</li>
+          <li>10% co-founder equity stake activates at sustained gross profit threshold</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="team-card" style="border-top:3px solid var(--purple);">
+        <div class="team-role">Community Director</div>
+        <div class="team-name">Tia</div>
+        <div class="team-title">Brand, Community & Outreach</div>
+        <ul class="blist">
+          <li>Produces the "Detective Dad Reacts" content series</li>
+          <li>Scripts and publishes the Substack newsletter</li>
+          <li>Researches venues for Shaun's AI Safety Workshops</li>
+          <li>Develops brand community presence and Facebook Group</li>
+          <li>Manages content calendar and TikTok/IG Lives with Dad</li>
+        </ul>
+      </div>
+      <div class="team-card" style="border-top:3px solid #c4b5fd;">
+        <div class="team-role">Social Media Manager</div>
+        <div class="team-name">Jada</div>
+        <div class="team-title">Social, Scheduling & Digital Presence</div>
+        <ul class="blist">
+          <li>Schedules and posts all content across platforms</li>
+          <li>Monitors and responds to comments and DMs (AI assists)</li>
+          <li>Manages TikTok Shop and social ad boosting</li>
+          <li>Tracks follower growth and engagement KPIs</li>
+          <li>Phase 2: manages paid ad campaigns with Shaun's guidance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="team-card" style="border-top:3px solid var(--accent2);">
+        <div class="team-role">Videographer</div>
+        <div class="team-name">Jeremiah</div>
+        <div class="team-title">Production & Video Content</div>
+        <ul class="blist">
+          <li>Films all hero content: founder story, unboxing, install walkthrough</li>
+          <li>Produces short-form cuts for TikTok and Reels</li>
+          <li>Optional: professional system installations (billable, +$99–$199)</li>
+          <li>Quarterly batch shoot sessions to maintain content library</li>
+        </ul>
+      </div>
+      <div class="team-card" style="border-top:3px solid var(--muted);">
+        <div class="team-role">Project Manager</div>
+        <div class="team-name">Mom</div>
+        <div class="team-title">Accountability & Coordination</div>
+        <ul class="blist">
+          <li>Weekly check-ins with all team members</li>
+          <li>Tracks deliverables, content calendar, and action items</li>
+          <li>Routes escalations to Shaun</li>
+          <li>Stipend begins Phase 2; salary formalizes at $20K/month revenue</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert alert-blue">
+      <div class="alert-t">📞 AI Customer Service Tier System</div>
+      <div class="alert-p"><strong style="color:#fff;">Tier 1 — AI Chatbot (70–80%):</strong> "How do I install?" "What's included?" Handles 24/7, instant. $50–$200/month. &nbsp;|&nbsp; <strong style="color:#fff;">Tier 2 — Jada:</strong> Escalated questions during business hours. &nbsp;|&nbsp; <strong style="color:#fff;">Tier 3 — Dad:</strong> Complex issues, unhappy customers, anything needing the owner's voice. Brand promise: "If you call, a real person from this family answers."</div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:16px;">
+      <div class="alert-t">🤖 AI Tools Running This Business</div>
+      <div class="alert-p">
+        <strong style="color:#fff;">Claude (Anthropic):</strong> Content strategy, captions, email sequences, scripts, business planning — $20/month (Pro) → $200/month (Max, for agent development) &nbsp;|&nbsp;
+        <strong style="color:#fff;">ManyChat:</strong> TikTok/IG DM automation + lead qualification — $15–$45/month &nbsp;|&nbsp;
+        <strong style="color:#fff;">n8n / Make:</strong> AI agent workflows for outreach automation — free self-hosted or $20–$50/month &nbsp;|&nbsp;
+        <strong style="color:#fff;">CapCut AI:</strong> Video editing automation — free &nbsp;|&nbsp;
+        <strong style="color:#fff;">Canva AI:</strong> Graphics and brand assets — $13/month &nbsp;|&nbsp;
+        <strong style="color:#fff;">Metricool/Buffer:</strong> Scheduling and analytics — $18–$45/month
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: REVENUE MODEL / CALCULATOR
+     ========================================================= -->
+<div class="tab-pane" id="tab-calculator">
+  <div class="section">
+    <div class="sl">Revenue Model</div>
+    <div class="st">The <span>Numbers</span></div>
+    <div class="si">Adjust the inputs below and every figure in this tab updates instantly. Hardware is the hook. Monitoring is the money.</div>
+
+    <div class="calc-wrapper">
+      <div class="calc-title">Revenue Calculator</div>
+      <div class="calc-sub">All projections below respond to these inputs in real time.</div>
+
+      <div class="calc-section-label">📦 Kit Economics</div>
+      <div class="input-grid">
+        <div class="input-block">
+          <label>Kit Retail Price ($)</label>
+          <input type="number" id="kitRetail" value="350" min="149" max="799" step="1" oninput="calc()">
+          <div class="input-val" id="kitRetailDisplay">$350</div>
+        </div>
+        <div class="input-block">
+          <label>Kit Wholesale Cost ($)</label>
+          <input type="number" id="kitCost" value="299" min="99" max="599" step="1" oninput="calc()">
+          <div class="input-val" id="kitCostDisplay">$299</div>
+        </div>
+        <div class="input-block">
+          <label>Kits Per Week</label>
+          <input type="range" id="kitsWk" value="10" min="1" max="60" oninput="calc()">
+          <div class="input-val" id="kitsWkDisplay">10 kits/week</div>
+        </div>
+        <div class="input-block">
+          <label>Kit → Monitoring Conversion</label>
+          <input type="range" id="convRate" value="50" min="10" max="90" oninput="calc()">
+          <div class="input-val" id="convDisplay">50% subscribe</div>
+        </div>
+      </div>
+
+      <div class="calc-section-label">📡 Monitoring Economics</div>
+      <div class="input-grid">
+        <div class="input-block">
+          <label>Wholesale Monitoring Cost ($/mo/sub)</label>
+          <input type="number" id="monoWholesale" value="11" min="1" max="30" step="1" oninput="calc()">
+          <div class="input-val" id="monoWholesaleDisplay">$11/mo</div>
+        </div>
+        <div class="input-block">
+          <label>Avg Add-On Revenue Per Kit</label>
+          <input type="range" id="addonAvg" value="0" min="0" max="300" step="10" oninput="calc()">
+          <div class="input-val" id="addonDisplay">$0 avg upsell</div>
+        </div>
+      </div>
+
+      <div class="calc-section-label">💳 Subscription Tiers (Monthly Rates)</div>
+      <div class="input-grid">
+        <div class="input-block">
+          <label>Month-to-Month Rate</label>
+          <input type="number" id="subMTM" value="45" min="19" max="99" step="1" oninput="calc()">
+          <div class="input-val" id="subMTMDisplay">$45/mo</div>
+        </div>
+        <div class="input-block">
+          <label>Annual Prepay Rate</label>
+          <input type="number" id="subAnnual" value="35" min="15" max="79" step="1" oninput="calc()">
+          <div class="input-val" id="subAnnualDisplay">$35/mo ($420/yr)</div>
+        </div>
+        <div class="input-block">
+          <label>2-Year Prepay Rate</label>
+          <input type="number" id="sub2yr" value="25" min="10" max="59" step="1" oninput="calc()">
+          <div class="input-val" id="sub2yrDisplay">$25/mo ($600/2yr)</div>
+        </div>
+        <div class="input-block">
+          <label>MTM % Mix (rest splits Annual/2yr)</label>
+          <input type="range" id="mtmPct" value="50" min="10" max="90" step="5" oninput="calc()">
+          <div class="input-val" id="mtmPctDisplay">50% MTM · 35% Annual · 15% 2yr</div>
+        </div>
+      </div>
+
+      <div class="calc-section-label">👥 Monthly Team Costs</div>
+      <div class="input-grid">
+        <div class="input-block">
+          <label>Shaun (COO)</label>
+          <input type="number" id="salShaun" value="0" min="0" max="10000" step="100" oninput="calc()">
+          <div class="input-val" id="salShaunD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Tia (Community Director)</label>
+          <input type="number" id="salTia" value="0" min="0" max="5000" step="100" oninput="calc()">
+          <div class="input-val" id="salTiaD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Jada (Social Media)</label>
+          <input type="number" id="salJada" value="0" min="0" max="5000" step="100" oninput="calc()">
+          <div class="input-val" id="salJadaD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Jeremiah (Videographer)</label>
+          <input type="number" id="salJer" value="0" min="0" max="3000" step="100" oninput="calc()">
+          <div class="input-val" id="salJerD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Mom (PM stipend)</label>
+          <input type="number" id="salMom" value="0" min="0" max="2000" step="100" oninput="calc()">
+          <div class="input-val" id="salMomD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Ads Budget</label>
+          <input type="number" id="adsBudget" value="0" min="0" max="10000" step="100" oninput="calc()">
+          <div class="input-val" id="adsBudgetD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Freelancers</label>
+          <input type="number" id="freelance" value="0" min="0" max="5000" step="100" oninput="calc()">
+          <div class="input-val" id="freelanceD">$0</div>
+        </div>
+        <div class="input-block">
+          <label>Tools & Software</label>
+          <input type="number" id="tools" value="200" min="0" max="1000" step="25" oninput="calc()">
+          <div class="input-val" id="toolsD">$200</div>
+        </div>
+      </div>
+
+      <div class="calc-section-label">📊 Month 3 Snapshot</div>
+      <div id="subTiersDisplay"></div>
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+
+    <!-- PROJECTIONS TABLE -->
+    <div class="sl" style="margin-top:40px;">Revenue Projections</div>
+    <div class="st" style="margin-bottom:8px;">Scenarios by <span>Kits Per Week</span></div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:20px;">All figures react to calculator inputs above. Green row = target. Gold row = stretch goal.</div>
+
+    <div style="overflow-x:auto;margin-bottom:16px;">
+    <table class="proj-table">
+      <thead>
+        <tr>
+          <th>Kits/Wk</th><th>Kits/Mo</th><th>Kit Revenue</th><th>Kit Margin</th>
+          <th>New Subs</th><th>Cumul. Subs</th><th>Sub Revenue</th><th>Sub Net</th>
+          <th>Add-On Rev</th><th>Total Revenue</th><th>Gross Profit</th><th>After Costs (mo)</th>
+        </tr>
+      </thead>
+      <tbody id="projBody"></tbody>
+    </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:28px;">* "After Costs (mo)" deducts all monthly team + ads + tools from gross profit. Assumes subscriber accumulation with 5% monthly churn.</p>
+
+    <div class="insight-box">
+      <span class="big-num" id="targetDisplay">—</span>
+      <p id="targetDesc">Adjust the calculator above to see your revenue projections.</p>
+    </div>
+
+    <div class="g3">
+      <div class="card ca">
+        <div class="clb">Break-even (lean costs)</div>
+        <div class="cv" id="be1">—</div>
+        <div class="cd">Kits/week to cover lean Phase 1 team costs</div>
+      </div>
+      <div class="card cb">
+        <div class="clb">Break-even (full costs)</div>
+        <div class="cv bl" id="be2">—</div>
+        <div class="cd">Kits/week with ads + full team. The real milestone.</div>
+      </div>
+      <div class="card cg">
+        <div class="clb">Net per Sub (annual tier)</div>
+        <div class="cv gr" id="netPerSub">$24</div>
+        <div class="cd">What you keep per subscriber per month after wholesale monitoring cost.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: STARTUP COSTS
+     ========================================================= -->
+<div class="tab-pane" id="tab-startupCosts">
+  <div class="section">
+    <div class="sl">Investment</div>
+    <div class="st">Startup <span>Costs</span></div>
+    <div class="si">What it costs to get off the ground. Edit any row, add new line items, remove what doesn't apply. Export and import to save your version.</div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+      <button class="add-cost-btn" onclick="addCostRow('oneTime')">+ Add One-Time Cost</button>
+      <button class="export-btn" onclick="exportCosts()">⬇ Export JSON</button>
+      <label class="import-btn" style="cursor:pointer;">⬆ Import JSON<input type="file" accept=".json" style="display:none;" onchange="importCosts(event)"></label>
+    </div>
+
+    <div class="g2">
+      <!-- ONE-TIME COSTS -->
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff;margin-bottom:12px;">One-Time Setup</div>
+        <div style="overflow-x:auto;">
+        <table class="cost-table" id="oneTimeCostTable">
+          <thead><tr><th>Item</th><th style="text-align:right;">Amount</th><th style="width:36px;"></th></tr></thead>
+          <tbody id="oneTimeCostBody"></tbody>
+        </table>
+        </div>
+        <div class="cost-total-row">
+          <span>Total One-Time</span>
+          <span class="cost-total-val" id="oneTimeTotal">$0</span>
+        </div>
+      </div>
+
+      <!-- MONTHLY RECURRING -->
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff;margin-bottom:12px;">Monthly Recurring</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <button class="add-cost-btn" onclick="addCostRow('monthly')">+ Add Monthly Cost</button>
+        </div>
+        <div style="overflow-x:auto;">
+        <table class="cost-table" id="monthlyCostTable">
+          <thead><tr><th>Item</th><th style="text-align:right;">Amount/Mo</th><th style="width:36px;"></th></tr></thead>
+          <tbody id="monthlyCostBody"></tbody>
+        </table>
+        </div>
+        <div class="cost-total-row">
+          <span>Total Monthly</span>
+          <span class="cost-total-val" id="monthlyTotal">$0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-gold" style="margin-top:20px;">
+      <div class="alert-t">📌 Total Launch Investment</div>
+      <div class="alert-p">One-time: <strong style="color:#fff;" id="launchInvestOne">$0</strong> &nbsp;+&nbsp; Monthly burn: <strong style="color:#fff;" id="launchInvestMonthly">$0</strong>/mo. Goal: cover monthly costs within 60 days through kit sales. The faster Dad confirms pricing with NAPCO, the sooner we can finalize these numbers.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB: ROADMAP
+     ========================================================= -->
+<div class="tab-pane" id="tab-roadmap">
+  <div class="section">
+    <div class="sl">Execution Plan</div>
+    <div class="st">The <span>Roadmap</span></div>
+    <div class="si">Four phases. Awareness and sales run in parallel from Day 1. We don't wait for organic to build before making money.</div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">0</div>
+        <div style="flex:1;"><div class="phase-name">Foundation — Legal, Financial & Operational Setup</div><div class="phase-time">Now · Goal: Everything Needed to Legally Operate and Take Money</div></div>
+        <span class="tag tr">Active Now</span>
+      </div>
+      <div class="phase-body">
+        <div class="step"><div class="step-l">A</div><div class="step-t"><strong>Dad:</strong> Finalize DBA paperwork (Obsidian Federal → HomeFront Watch). Open business bank account. Confirm exact kit price + monitoring wholesale cost with NAPCO. Check on drop-ship option from NAPCO.</div></div>
+        <div class="step"><div class="step-l">B</div><div class="step-t"><strong>Shaun:</strong> Set up Gmail accounts (Shaun, Dad, Mom). Register all social handles. Purchase domain names ✅ Done. Send meeting minutes to Mom and Dad.</div></div>
+        <div class="step"><div class="step-l">C</div><div class="step-t"><strong>Dad:</strong> Determine which state license is under Intel or Obsidian — critical for understanding where monitoring can legally be sold. Research MD, DC, VA licensing requirements.</div></div>
+        <div class="step"><div class="step-l">D</div><div class="step-t"><strong>Dad (get Shaun a laptop):</strong> Shaun needs a machine to run Claude Code and AI agent workflows. This is infrastructure — not a nice-to-have. Action item for Dad.</div></div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div style="flex:1;"><div class="phase-name">Pre-Launch — Store, Content Infrastructure & First Agent</div><div class="phase-time">Weeks 1–6 · Goal: Store Live, Handles Claimed, First Content Posted</div></div>
+        <span class="tag ty">Up Next</span>
+      </div>
+      <div class="phase-body">
+        <div class="step"><div class="step-l">A</div><div class="step-t"><strong>Claim all platform handles.</strong> TikTok, Instagram, Facebook, YouTube, Substack, Medium, LinkedIn, Nextdoor. Same handle across every platform: @HomeFrontWatch.</div></div>
+        <div class="step"><div class="step-l">B</div><div class="step-t"><strong>Build Shopify store.</strong> Hero product page: base kit with all three subscription tiers clearly shown. Add-ons listed. Activate TikTok Shop (0% commission for 90 days). Research lease-to-own / credit check capability.</div></div>
+        <div class="step"><div class="step-l">C</div><div class="step-t"><strong>Launch "Detective Dad Reacts to Headlines" content series.</strong> Batch-film 7 episodes in one sitting. Tia reads headline, Dad responds. Post one daily. Tia manages the AI morning news digest that feeds the topics.</div></div>
+        <div class="step"><div class="step-l">D</div><div class="step-t"><strong>Launch Substack — "The Detective Dad Security Brief."</strong> Free newsletter, published weekly. Dad writes (Tia scripts and publishes, AI assists with research). Build audience before the hard sell.</div></div>
+        <div class="step"><div class="step-l">E</div><div class="step-t"><strong>Shaun begins AI agent infrastructure.</strong> ManyChat setup for Instagram DM automation. Research Typeform/Interact for Home Safety Scorecard quiz. Scout n8n for outreach automation workflow.</div></div>
+        <div class="step"><div class="step-l">F</div><div class="step-t"><strong>Kevin connects Dad with his realtor friend.</strong> Meeting with one real estate agent to explore referral partnership — even before full PA/NJ/NY launch. Relationship first, sales later.</div></div>
+        <div class="step"><div class="step-l">G</div><div class="step-t"><strong>Begin planning Shaun's AI Safety Workshops.</strong> Shaun and Tia research venues — churches, senior centers, HOAs in the PA/NJ target area. First workshop goal: end of Phase 1 or early Phase 2.</div></div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div style="flex:1;"><div class="phase-name">Launch & First Sales — AI Outreach Live, Dad Taking Calls</div><div class="phase-time">Weeks 6–12 · Goal: First 10–25 Paying Customers</div></div>
+        <span class="tag tb">Build Momentum</span>
+      </div>
+      <div class="phase-body">
+        <div class="step"><div class="step-l">A</div><div class="step-t"><strong>Launch AI outreach agents.</strong> LinkedIn, Nextdoor, social media DMs — AI handles first touch, qualifies leads, routes to Home Safety Scorecard quiz. Dad takes the calls that come in warm.</div></div>
+        <div class="step"><div class="step-l">B</div><div class="step-t"><strong>Launch Instagram Follower Ads.</strong> Simple video of Dad speaking to camera. When someone follows, ManyChat auto-DMs: "Hey, saw you followed! Are you thinking about home security?" Geo-target: PA, NJ, NY zip codes only.</div></div>
+        <div class="step"><div class="step-l">C</div><div class="step-t"><strong>Launch Home Safety Scorecard quiz.</strong> All social bios link to this. TikTok/IG comments route here. Dad reaches out personally to everyone who scores a C or below. This is the conversion engine.</div></div>
+        <div class="step"><div class="step-l">D</div><div class="step-t"><strong>First TikTok Live.</strong> Dad answers security questions live. Push the annual prepay bundle. 50–100 viewers can generate 5–10 sales. Tia produces. Jada promotes beforehand.</div></div>
+        <div class="step"><div class="step-l">E</div><div class="step-t"><strong>Set up Thumbtack profile</strong> for "Home Security Installation" — generates inbound leads with zero ad spend. PA/NJ/NY service areas only.</div></div>
+        <div class="step"><div class="step-l">F</div><div class="step-t"><strong>Launch Shaun's AI Safety Workshops.</strong> First appearance at a church, senior center, or HOA. Shaun presents. Dad co-appears when possible. HomeFront Watch is introduced naturally at the end.</div></div>
+        <div class="step"><div class="step-l">G</div><div class="step-t"><strong>Set up AI call assistant</strong> (replicate Jeremiah's setup) — AI answers calls, answers FAQs, schedules appointments, confirms installs. Frees Dad for warm, qualified conversations only.</div></div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div style="flex:1;"><div class="phase-name">Scale — Paid Ads, Geographic Expansion & Substack Monetization</div><div class="phase-time">Months 3–6 · Goal: 20–30 Kits/Week · $20K+ Monthly Revenue</div></div>
+        <span class="tag tb">Scale</span>
+      </div>
+      <div class="phase-body">
+        <div class="step"><div class="step-l">A</div><div class="step-t"><strong>Scale winning ad campaigns max 5%/week.</strong> Add retargeting: ads to people who visited Shopify but didn't buy. Retargeting converts at 2–3× cold traffic rate.</div></div>
+        <div class="step"><div class="step-l">B</div><div class="step-t"><strong>Monetize Substack — add paid tier ($5–$10/month).</strong> "Detective Dad Security Brief — Pro Edition" with exclusive content: case studies, neighborhood crime trend reports. Target: 200+ paid subscribers = $1,000–$2,000/month.</div></div>
+        <div class="step"><div class="step-l">C</div><div class="step-t"><strong>Dad pursues MD, DC, VA licensing.</strong> Enables geographic expansion to DMV market — 4+ million new addressable households. This unlocks the next growth phase.</div></div>
+        <div class="step"><div class="step-l">D</div><div class="step-t"><strong>Evaluate car camera product line.</strong> Dad has 10 units for testing. Review playbook. If viable, plan Phase 4 launch as a parallel SKU — not integrated with Prima app. Requires US 3PL warehousing.</div></div>
+        <div class="step"><div class="step-l">E</div><div class="step-t"><strong>Activate commission structure</strong> once revenue thresholds are sustained for 2 consecutive months. Formalizes team compensation.</div></div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div style="flex:1;"><div class="phase-name">Expansion — National, New Products & Brand Authority</div><div class="phase-time">Month 6–12+ · Goal: $50K+ Monthly · 500+ Subscribers · National Presence</div></div>
+        <span class="tag tb">Dominate</span>
+      </div>
+      <div class="phase-body">
+        <div class="step"><div class="step-l">A</div><div class="step-t"><strong>Launch YouTube Shorts</strong> by repurposing top TikToks. Zero additional production cost.</div></div>
+        <div class="step"><div class="step-l">B</div><div class="step-t"><strong>Begin long-form YouTube.</strong> Dad: 8–15 minute home security walkthroughs, neighborhood crime breakdowns, product comparisons. Builds SEO authority and captures high-intent buyers.</div></div>
+        <div class="step"><div class="step-l">C</div><div class="step-t"><strong>Partner with homeowner insurance companies.</strong> Most offer discounts for professionally monitored systems. Get HomeFront Watch listed as a recommended provider. Affiliate revenue: $50–$200 per referral.</div></div>
+        <div class="step"><div class="step-l">D</div><div class="step-t"><strong>Launch car camera product line</strong> as a parallel SKU (if Phase 3 evaluation is positive). "Home security for your car." Own the white space Ring abandoned.</div></div>
+        <div class="step"><div class="step-l">E</div><div class="step-t"><strong>Pursue press coverage</strong> — Forbes, Black Enterprise, local news. Dad's SIU detective story + family business angle is editorial gold. Tia manages outreach.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">HOMEFRONT WATCH</div>
+  <p>by Obsidian Federal LLC · Business Plan v1.1.0 · April 2026</p>
+  <p style="margin-top:6px;font-size:11px;opacity:.5;">Confidential · Internal Use Only · Not for External Distribution</p>
+</footer>
+
+<script>
+// ============================================================
+// CONSTANTS & HELPERS
+// ============================================================
+const $ = id => document.getElementById(id);
+const fmt = n => '$' + Math.round(n).toLocaleString();
+const fmtK = n => n >= 1000 ? '$' + (n/1000).toFixed(1)+'K' : fmt(n);
+
+// ============================================================
+// TABS
+// ============================================================
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const pane = $('tab-' + name);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+  // Hide cover once user navigates into a tab
+  const cover = $('cover');
+  if (cover) cover.style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function openSettings() {
+  $('settingsOverlay').classList.add('open');
+  $('settingsPanel').classList.add('open');
+}
+function closeSettings() {
+  $('settingsOverlay').classList.remove('open');
+  $('settingsPanel').classList.remove('open');
+}
+function setTheme(el) {
+  document.querySelectorAll('.stg-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  document.documentElement.style.setProperty('--accent', el.dataset.accent);
+  document.documentElement.style.setProperty('--accent2', el.dataset.accent2);
+}
+function setBgDark(val) {
+  const v = parseInt(val);
+  document.documentElement.style.setProperty('--panel', `hsl(220,28%,${Math.max(2,8-v*0.2)}%)`);
+}
+function setFontSize(val) {
+  const px = parseInt(val) + 'px';
+  // Target all content text elements directly — bypasses any hardcoded font-size in inline styles
+  const selectors = [
+    '.si', '.cd', '.alert-p', '.blist li', '.step-t', '.strategy-body',
+    '.member-info .desc', '.founder-quote', '.cover-desc', '.team-card .blist li',
+    '.comp-table td', '.proj-table td', '.cost-table td', '.phase-body .step-t',
+    '.card p', '.stg-info'
+  ];
+  selectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => { el.style.fontSize = px; });
+  });
+  $('fontSizeLabel').textContent = val + 'px — body paragraphs, bullets, table text';
+}
+
+// ============================================================
+// CALCULATOR
+// ============================================================
+function calc() {
+  const kitRetail  = parseFloat($('kitRetail').value)    || 350;
+  const kitCost    = parseFloat($('kitCost').value)      || 299;
+  const kitsWk     = parseFloat($('kitsWk').value)       || 10;
+  const convPct    = parseFloat($('convRate').value)     || 50;
+  const monoWhole  = parseFloat($('monoWholesale').value)|| 11;
+  const addonAvg   = parseFloat($('addonAvg').value)     || 0;
+  const subMTM     = parseFloat($('subMTM').value)       || 45;
+  const subAnnual  = parseFloat($('subAnnual').value)    || 35;
+  const sub2yr     = parseFloat($('sub2yr').value)       || 25;
+  const mtmPct     = parseFloat($('mtmPct').value)       || 50;
+  const salShaun   = parseFloat($('salShaun').value)     || 0;
+  const salTia     = parseFloat($('salTia').value)       || 0;
+  const salJada    = parseFloat($('salJada').value)      || 0;
+  const salJer     = parseFloat($('salJer').value)       || 0;
+  const salMom     = parseFloat($('salMom').value)       || 0;
+  const adsBudget  = parseFloat($('adsBudget').value)    || 0;
+  const freelance  = parseFloat($('freelance').value)    || 0;
+  const tools      = parseFloat($('tools').value)        || 200;
+
+  // Update display labels
+  $('kitRetailDisplay').textContent  = fmt(kitRetail);
+  $('kitCostDisplay').textContent    = fmt(kitCost);
+  $('kitsWkDisplay').textContent     = Math.round(kitsWk) + ' kits/week';
+  $('convDisplay').textContent       = Math.round(convPct) + '% subscribe';
+  $('monoWholesaleDisplay').textContent = fmt(monoWhole) + '/mo';
+  $('addonDisplay').textContent      = fmt(addonAvg) + ' avg upsell';
+  $('subMTMDisplay').textContent     = fmt(subMTM) + '/mo';
+  $('subAnnualDisplay').textContent  = fmt(subAnnual) + '/mo (' + fmt(subAnnual*12) + '/yr)';
+  $('sub2yrDisplay').textContent     = fmt(sub2yr) + '/mo (' + fmt(sub2yr*24) + '/2yr)';
+  const annualPct = Math.round((100 - mtmPct) * 0.7);
+  const twoyrPct  = 100 - mtmPct - annualPct;
+  $('mtmPctDisplay').textContent = mtmPct + '% MTM · ' + annualPct + '% Annual · ' + twoyrPct + '% 2yr';
+  $('salShaunD').textContent  = fmt(salShaun);
+  $('salTiaD').textContent    = fmt(salTia);
+  $('salJadaD').textContent   = fmt(salJada);
+  $('salJerD').textContent    = fmt(salJer);
+  $('salMomD').textContent    = fmt(salMom);
+  $('adsBudgetD').textContent = fmt(adsBudget);
+  $('freelanceD').textContent = fmt(freelance);
+  $('toolsD').textContent     = fmt(tools);
+
+  const fixedTools = 39 + 36; // Shopify + Google Workspace (3 users × $12)
+  const totalMonthly = salShaun + salTia + salJada + salJer + salMom + adsBudget + freelance + tools + fixedTools;
+
+  // Blended rates
+  const annualPctDec = annualPct/100, twoyrPctDec = twoyrPct/100, mtmPctDec = mtmPct/100;
+  const blendedRetail = subMTM*mtmPctDec + subAnnual*annualPctDec + sub2yr*twoyrPctDec;
+  const blendedNet    = blendedRetail - monoWhole;
+
+  // Month 3 snapshot
+  const kitsMonth = kitsWk * 4.33;
+  const kitMargin = kitRetail - kitCost;
+  const kitRevM   = kitsMonth * kitRetail;
+  const kitMarM   = kitsMonth * kitMargin;
+  const addonRevM = kitsMonth * addonAvg;
+  const newSubsM  = kitsMonth * (convPct/100);
+  let subs = 0;
+  for (let m = 0; m < 3; m++) subs = subs * 0.95 + newSubsM;
+  const subRevM  = subs * blendedRetail;
+  const subNetM  = subs * blendedNet;
+  const totalRevM = kitRevM + subRevM + addonRevM;
+  const grossProfM = kitMarM + subNetM + addonRevM;
+  const afterCosts = grossProfM - totalMonthly;
+
+  // Sub tiers display
+  $('subTiersDisplay').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+      <div class="sub-tier"><div class="sub-tier-name">Month-to-Month</div><div class="sub-tier-price">${fmt(subMTM)}/mo</div><div class="sub-tier-note">Net: ${fmt(Math.max(0,subMTM-monoWhole))}/mo</div></div>
+      <div class="sub-tier active"><div class="sub-tier-name">Annual Prepay ⭐</div><div class="sub-tier-price">${fmt(subAnnual)}/mo</div><div class="sub-tier-note">${fmt(subAnnual*12)}/yr · Net: ${fmt(Math.max(0,subAnnual-monoWhole))}/mo</div></div>
+      <div class="sub-tier"><div class="sub-tier-name">2-Year Prepay</div><div class="sub-tier-price">${fmt(sub2yr)}/mo</div><div class="sub-tier-note">${fmt(sub2yr*24)}/2yr · Net: ${fmt(Math.max(0,sub2yr-monoWhole))}/mo</div></div>
+    </div>`;
+
+  // Results grid
+  $('resultsGrid').innerHTML = `
+    <div class="res-card"><div class="res-label">Kit Margin/Unit</div><div class="res-val ${kitMargin<0?'rv-red':'rv-gold'}">${fmt(kitMargin)}</div></div>
+    <div class="res-card"><div class="res-label">Kits/Month</div><div class="res-val rv-blue">${Math.round(kitsMonth)}</div></div>
+    <div class="res-card"><div class="res-label">Kit Revenue</div><div class="res-val rv-gold">${fmtK(kitRevM)}</div></div>
+    <div class="res-card"><div class="res-label">Add-On Revenue</div><div class="res-val rv-gold">${fmtK(addonRevM)}</div></div>
+    <div class="res-card"><div class="res-label">Active Subscribers</div><div class="res-val rv-blue">${Math.round(subs)}</div></div>
+    <div class="res-card"><div class="res-label">Blended Sub Rate</div><div class="res-val rv-gold">${fmt(blendedRetail)}/mo</div></div>
+    <div class="res-card"><div class="res-label">Sub Revenue/Mo</div><div class="res-val rv-green">${fmtK(subRevM)}</div></div>
+    <div class="res-card"><div class="res-label">Sub Net/Mo</div><div class="res-val rv-green">${fmtK(subNetM)}</div></div>
+    <div class="res-card"><div class="res-label">Total Revenue</div><div class="res-val rv-gold">${fmtK(totalRevM)}</div></div>
+    <div class="res-card"><div class="res-label">Gross Profit</div><div class="res-val rv-green">${fmtK(grossProfM)}</div></div>
+    <div class="res-card"><div class="res-label">After All Costs (mo)</div><div class="res-val ${afterCosts<0?'rv-red':'rv-green'}">${fmtK(afterCosts)}</div></div>
+    <div class="res-card"><div class="res-label">Annual Run Rate</div><div class="res-val rv-gold">${fmtK(totalRevM*12)}</div></div>
+  `;
+
+  // Insight
+  if($('targetDisplay')) $('targetDisplay').textContent = fmtK(Math.round(totalRevM));
+  if($('targetDesc')) $('targetDesc').textContent = 'Monthly revenue at ' + Math.round(kitsWk) + ' kits/week with your current inputs.';
+  if($('netPerSub')) $('netPerSub').textContent = fmt(Math.max(0, subAnnual - monoWhole));
+
+  // Bar chart labels
+  if($('barMTM'))    $('barMTM').textContent    = fmt(subMTM);
+  if($('barAnnual')) $('barAnnual').textContent = fmt(subAnnual);
+  if($('bar2yr'))    $('bar2yr').textContent    = fmt(sub2yr);
+
+  // Opposition kit price
+  if($('oppKitPrice')) $('oppKitPrice').textContent = fmt(kitRetail);
+
+  // Tier cards
+  if($('mtmCard'))    $('mtmCard').innerHTML    = fmt(subMTM)+'<span style="font-size:16px;">/mo</span>';
+  if($('annualCard')) $('annualCard').innerHTML = fmt(subAnnual)+'<span style="font-size:16px;">/mo</span>';
+  if($('twoyrCard'))  $('twoyrCard').innerHTML  = fmt(sub2yr)+'<span style="font-size:16px;">/mo</span>';
+
+  // Break-even
+  const lean = tools + fixedTools;
+  const full = totalMonthly;
+  const beKitMargin = kitMargin > 0 ? kitMargin : 1;
+  if($('be1')) $('be1').textContent = lean > 0 ? '~' + Math.ceil(lean/(beKitMargin*4.33)) : '—';
+  if($('be2')) $('be2').textContent = full > 0 ? '~' + Math.ceil(full/(beKitMargin*4.33)) : '—';
+
+  // Projection table
+  buildProj(kitRetail, kitCost, blendedRetail, blendedNet, convPct/100, addonAvg, totalMonthly);
+
+  // Startup cost totals sync
+  recalcCostTotals();
+}
+
+function buildProj(kitRetail, kitCost, blendedRetail, blendedNet, conv, addonAvg, totalCosts) {
+  const scenarios = [2,5,10,15,20,30,50];
+  let cumSubs = 0;
+  const kitMargin = kitRetail - kitCost;
+  let rows = '';
+  scenarios.forEach(wk => {
+    const kitsM = wk * 4.33;
+    const kitRev = kitsM * kitRetail;
+    const kitMar = kitsM * kitMargin;
+    const addon  = kitsM * addonAvg;
+    const newS   = kitsM * conv;
+    cumSubs = cumSubs * 0.95 + newS;
+    const subRev = cumSubs * blendedRetail;
+    const subNet = cumSubs * blendedNet;
+    const totRev = kitRev + subRev + addon;
+    const gross  = kitMar + subNet + addon;
+    const after  = gross - totalCosts;
+    let cls = '';
+    if (wk === 15) cls = 'ptarget';
+    if (wk === 30) cls = 'pstretch';
+    const lbl = wk === 15 ? '✓ 15/wk' : wk === 30 ? '⭐ 30/wk' : wk+'/wk';
+    rows += `<tr class="${cls}">
+      <td>${lbl}</td><td>${Math.round(kitsM)}</td><td>${fmtK(kitRev)}</td><td>${fmtK(kitMar)}</td>
+      <td>${Math.round(newS)}</td><td>${Math.round(cumSubs)}</td><td>${fmtK(subRev)}</td><td>${fmtK(subNet)}</td>
+      <td>${fmtK(addon)}</td><td>${fmtK(totRev)}</td><td>${fmtK(gross)}</td>
+      <td class="${after<0?'rv-red':''}" style="${after<0?'color:var(--red)':''}">${fmtK(after)}</td>
+    </tr>`;
+  });
+  if($('projBody')) $('projBody').innerHTML = rows;
+}
+
+// ============================================================
+// STARTUP COSTS
+// ============================================================
+const defaultOneTimeCosts = [
+  {label:'Domain names (2)', amount:35},
+  {label:'Google Workspace (3 users × $12)', amount:36},
+  {label:'Shopify (first month)', amount:39},
+  {label:'TikTok Shop registration', amount:0},
+  {label:'Logo design (Shaun)', amount:0},
+  {label:'Laptop for AI agent development (Dad → Shaun)', amount:1200},
+];
+const defaultMonthlyCosts = [
+  {label:'Shopify Basic', amount:39},
+  {label:'Google Workspace (3 users)', amount:36},
+  {label:'ManyChat (DM automation)', amount:25},
+  {label:'Canva Pro', amount:13},
+  {label:'Buffer / Metricool', amount:30},
+  {label:'Claude Pro (Shaun)', amount:20},
+  {label:'Monitoring wholesale (per subscriber)', amount:0, note:'Variable'},
+];
+
+let oneTimeCosts = [...defaultOneTimeCosts.map(c=>({...c}))];
+let monthlyCosts = [...defaultMonthlyCosts.map(c=>({...c}))];
+
+function renderCostTable(data, tbodyId, type) {
+  const tbody = $(tbodyId);
+  if (!tbody) return;
+  tbody.innerHTML = data.map((row, i) => `
+    <tr>
+      <td><input value="${row.label}" oninput="updateCost('${type}',${i},'label',this.value)" placeholder="Item name"></td>
+      <td><input class="cost-amt" type="number" value="${row.amount}" min="0" step="1" oninput="updateCost('${type}',${i},'amount',this.value)" placeholder="0"></td>
+      <td><button class="del-btn" onclick="deleteCostRow('${type}',${i})">✕</button></td>
+    </tr>`).join('');
+  recalcCostTotals();
+}
+
+function updateCost(type, idx, field, val) {
+  const arr = type === 'oneTime' ? oneTimeCosts : monthlyCosts;
+  arr[idx][field] = field === 'amount' ? (parseFloat(val)||0) : val;
+  recalcCostTotals();
+}
+function deleteCostRow(type, idx) {
+  if (type === 'oneTime') oneTimeCosts.splice(idx, 1);
+  else monthlyCosts.splice(idx, 1);
+  renderCostTable(oneTimeCosts, 'oneTimeCostBody', 'oneTime');
+  renderCostTable(monthlyCosts, 'monthlyCostBody', 'monthly');
+}
+function addCostRow(type) {
+  if (type === 'oneTime') { oneTimeCosts.push({label:'New item', amount:0}); renderCostTable(oneTimeCosts,'oneTimeCostBody','oneTime'); }
+  else { monthlyCosts.push({label:'New item', amount:0}); renderCostTable(monthlyCosts,'monthlyCostBody','monthly'); }
+}
+function recalcCostTotals() {
+  const oneTotal = oneTimeCosts.reduce((s,r)=>s+(parseFloat(r.amount)||0),0);
+  const moTotal  = monthlyCosts.reduce((s,r)=>s+(parseFloat(r.amount)||0),0);
+  if($('oneTimeTotal')) $('oneTimeTotal').textContent = fmt(oneTotal);
+  if($('monthlyTotal')) $('monthlyTotal').textContent = fmt(moTotal);
+  if($('launchInvestOne')) $('launchInvestOne').textContent = fmt(oneTotal);
+  if($('launchInvestMonthly')) $('launchInvestMonthly').textContent = fmt(moTotal);
+}
+function exportCosts() {
+  const data = JSON.stringify({oneTimeCosts, monthlyCosts}, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'homefront_startup_costs.json';
+  a.click();
+}
+function importCosts(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.oneTimeCosts) oneTimeCosts = data.oneTimeCosts;
+      if (data.monthlyCosts) monthlyCosts = data.monthlyCosts;
+      renderCostTable(oneTimeCosts,'oneTimeCostBody','oneTime');
+      renderCostTable(monthlyCosts,'monthlyCostBody','monthly');
+    } catch(err) { alert('Invalid JSON file.'); }
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  calc();
+  renderCostTable(oneTimeCosts,'oneTimeCostBody','oneTime');
+  renderCostTable(monthlyCosts,'monthlyCostBody','monthly');
+});
+</script>
+</body>
+</html>
