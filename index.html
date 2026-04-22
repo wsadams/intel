@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.21                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.22                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -388,7 +388,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.21</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.22</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -900,7 +900,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.21', logoUrl='';
+let appVersion='v2.1.22', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -2355,7 +2355,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.21</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.22</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2363,7 +2363,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.21';
+  appVersion='v2.1.22';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   // Save logo padding into localStorage so it persists
@@ -2389,7 +2389,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.21</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.22</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2654,10 +2654,35 @@ function renderResourceLinksSettings(){
       ondragstart="resDS(event,${i})" ondragover="resDO(event)" ondrop="resDrop(event,${i})" ondragend="resDEnd()"
       style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;cursor:default;transition:opacity .15s">
       <span class="dh" style="cursor:grab;font-size:14px;opacity:.4">⠿</span>
-      <span style="font-weight:500;font-size:12.5px;min-width:120px">${esc(r.label||'—')}</span>
+      <span style="font-weight:500;font-size:12.5px;min-width:120px;flex:0 0 140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label||'—')}</span>
       <a href="${esc(r.url)}" target="_blank" style="font-size:11px;color:var(--acc2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.url)}</a>
+      <button class="edit-row-btn" onclick="editResourceLink(${i})" title="Edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
       <button class="del-btn" onclick="removeResourceLink(${i})" title="Remove"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
     </div>`).join('');
+}
+function editResourceLink(idx){
+  const r=resourceLinks[idx];
+  const el=document.getElementById('resourceLinksList');
+  const row=el.querySelector(`[data-ri="${idx}"]`);
+  if(!row)return;
+  row.draggable=false;
+  row.innerHTML=`
+    <span class="dh" style="font-size:14px;opacity:.2">⠿</span>
+    <input id="resEditLabel${idx}" value="${esc(r.label||'')}" placeholder="Label" style="flex:0 0 140px;padding:4px 8px;background:var(--acc3);border:1.5px solid var(--acc);border-radius:5px;color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;outline:none;">
+    <input id="resEditUrl${idx}" value="${esc(r.url||'')}" placeholder="https://…" style="flex:1;padding:4px 8px;background:var(--acc3);border:1.5px solid var(--acc);border-radius:5px;color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;outline:none;">
+    <button class="btn btn-gold btn-xs" onclick="saveResourceEdit(${idx})">✓ Save</button>
+    <button class="btn btn-ghost btn-xs" onclick="renderResourceLinksSettings()">✕</button>`;
+  document.getElementById(`resEditLabel${idx}`)?.focus();
+}
+function saveResourceEdit(idx){
+  const label=document.getElementById(`resEditLabel${idx}`)?.value.trim();
+  const url=document.getElementById(`resEditUrl${idx}`)?.value.trim();
+  if(!url){toast('URL is required');return;}
+  const fullUrl=url.startsWith('http')?url:'https://'+url;
+  resourceLinks[idx]={label:label||fullUrl, url:fullUrl};
+  renderResourceLinksSettings();
+  saveSettingsToSb();
+  toast('✓ Resource updated');
 }
 function resDS(e,idx){_resDragIdx=idx;e.dataTransfer.effectAllowed='move';setTimeout(()=>{const el=document.querySelector(`[data-ri="${idx}"]`);if(el)el.style.opacity='.3';},0);}
 function resDO(e){e.preventDefault();e.dataTransfer.dropEffect='move';}
