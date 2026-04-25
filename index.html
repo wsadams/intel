@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!--
 ╔══════════════════════════════════════════════════════════════╗
-║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.5                    ║
+║   HOMEFRONT WATCH — PROJECT PLANNER  v2.1.6                    ║
 ║   Intelligent Surveillance Corp                              ║
 ║   Supabase Project: nhqytnaevtynbkgypidb                     ║
 ╠══════════════════════════════════════════════════════════════╣
@@ -388,7 +388,7 @@ td input[type=date].ci{color-scheme:dark;}
   <div class="logo">
     <img id="logoImg" class="logo-img" src="" alt="logo">
     <div class="logo-text">
-      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.5</span></div>
+      <div class="logo-name" id="headerTitle">Homefront Watch <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.6</span></div>
       <div class="logo-sub" id="headerSubtitle">Intelligent Surveillance Corp — Project Planner</div>
     </div>
   </div>
@@ -900,7 +900,7 @@ let people=["Dad","Shaun","Tia","Jada","Jeremiah","Mom"];
 let allTags=[];
 let notes=[];
 let appTitle='Homefront Watch', appSubtitle='Intelligent Surveillance Corp — Project Planner';
-let appVersion='v2.1.5', logoUrl='';
+let appVersion='v2.1.6', logoUrl='';
 
 let currentTab='__all__', currentPage='planner', currentView='table';
 let currentUser=localStorage.getItem('hw_user')||'';
@@ -1803,6 +1803,8 @@ function saveTaskNote(){
 //  ADD / SAVE / DELETE TASK
 // ══════════════════════════════════════════════════════════════
 function openAddModal(id=null,parentId=null){
+  // When editing an existing task, always preserve its own parentId
+  if(id){const existing=tasks.find(x=>x.id===id);if(existing&&existing.parentId)parentId=existing.parentId;}
   document.getElementById('modalTitle').textContent=id?'Edit Task':parentId?'Add Subtask':'Add Task';
   document.getElementById('editId').value=id||'';
   document.getElementById('editParentId').value=parentId||'';
@@ -2377,7 +2379,7 @@ function previewBranding(){
   const t=document.getElementById('setTitle').value||'Homefront Watch';
   const s=document.getElementById('setSubtitle').value||'';
   const logo=document.getElementById('setLogoUrl').value||'';
-  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.5</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(t)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.6</span>`;
   document.getElementById('headerSubtitle').textContent=s;
   const img=document.getElementById('logoImg');
   if(logo){img.src=logo;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
@@ -2385,7 +2387,7 @@ function previewBranding(){
 async function saveBranding(){
   appTitle=document.getElementById('setTitle').value.trim()||appTitle;
   appSubtitle=document.getElementById('setSubtitle').value.trim();
-  appVersion='v2.1.5';
+  appVersion='v2.1.6';
   logoUrl=document.getElementById('setLogoUrl').value.trim();
   defaultPhase=document.getElementById('setDefaultPhase')?.value||'Phase 1';
   // Save logo padding into localStorage so it persists
@@ -2411,7 +2413,7 @@ function previewLogoPadding(){
   document.documentElement.style.setProperty('--logo-pad-y', val+'px');
 }
 function applyBrandingToHeader(){
-  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.5</span>`;
+  document.getElementById('headerTitle').innerHTML=`${esc(appTitle)} <span style="font-size:11px;color:var(--mid);font-weight:400">v2.1.6</span>`;
   document.getElementById('headerSubtitle').textContent=appSubtitle;
   const img=document.getElementById('logoImg');
   if(logoUrl){img.src=logoUrl;img.classList.add('visible');}else{img.src='';img.classList.remove('visible');}
